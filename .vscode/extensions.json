@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "mikestead.dotenv",
+    "dsznajder.es7-react-js-snippets",
+    "dbaeumer.vscode-eslint",
+    "mkxml.vscode-filesize",
+    "ritwickdey.liveserver",
+    "davidanson.vscode-markdownlint",
+    "zhuangtongfa.material-theme",
+    "esbenp.prettier-vscode",
+    "syler.sass-indented",
+    "visualstudioexptteam.vscodeintellicode",
+    "formulahendry.code-runner"
+  ]
+}
