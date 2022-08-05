@@ -13,7 +13,7 @@ import {
 } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Login from './pages/Login';
-import Products from './pages/Products';
+import ProductPage from './pages/Products';
 const LinkBehavior = React.forwardRef<
   HTMLAnchorElement,
   Omit<RouterLinkProps, 'to'> & { href: RouterLinkProps['to'] }
@@ -62,12 +62,12 @@ const App: React.FC = () => (
       <CssBaseline />
       <BrowserRouter>
         <Navbar />
-        <Grid container justifyContent='center'>
+        <Grid container justifyContent='center' marginTop={10}>
           <Routes>
-            <Route path='/' element={<Products />} />
+            <Route path='/' element={<ProductPage />} />
             <Route path='/dang-nhap' element={<Login />} />
             <Route path='/qr-code' element={<QRCode />} />
-            <Route path='/san-pham' element={<Products />} />
+            <Route path='/san-pham' element={<ProductPage />} />
           </Routes>
         </Grid>
       </BrowserRouter>
