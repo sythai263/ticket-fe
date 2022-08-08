@@ -1,6 +1,6 @@
 import { CircularProgress, Grid } from '@mui/material';
 import { Container } from '@mui/system';
-import productApi from 'api/productAPI';
+import productApi from 'api/product.api';
 import Product from 'components/Product';
 import { ProductType } from 'constants/types/productType';
 import { useEffect, useState } from 'react';

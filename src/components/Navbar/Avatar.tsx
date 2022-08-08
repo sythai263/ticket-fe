@@ -8,38 +8,47 @@ import {
   Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { useAppSelector } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
+import { logout } from '../../features/login/userSlice';
 
 const AvatarNav = () => {
-  const user = useAppSelector((state: any) => state.user.current);
+  const user = useAppSelector((state: any) => state.user);
+  const dispatch = useAppDispatch();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [isLogout, setLogout] = useState(user.isAuthenticate);
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogout = async () => {
+    setAnchorElUser(null);
+    dispatch(logout());
+    setLogout(true);
+  };
   const userSetting = [
     {
       display: 'Thông tin cá nhân',
-      slug: '/tai-khoan/thong-tin',
+      slug: '/nguoi-dung/thong-tin',
     },
     {
       display: 'Đổi mật khẩu',
-      slug: '/tai-khoan/doi-mat-khau',
-    },
-    {
-      display: 'Đăng xuất',
-      slug: '/dang-xuat',
+      slug: '/nguoi-dung/doi-mat-khau',
     },
   ];
+  if (isLogout) {
+    return <Navigate to='/dang-nhap' />;
+  }
   return (
     <>
       <Box sx={{ flexGrow: 0 }}>
         <Tooltip title='Chức năng'>
           <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-            <Avatar alt={user.firstName} src={user.avatar} />
+            <Avatar alt={user.current.firstName} src={user.current.avatar} />
           </IconButton>
         </Tooltip>
         <Menu
@@ -64,6 +73,9 @@ const AvatarNav = () => {
               </Link>
             </MenuItem>
           ))}
+          <MenuItem key='dang-xuat' onClick={handleLogout}>
+            <Typography textAlign='center'>Đăng xuất</Typography>
+          </MenuItem>
         </Menu>
       </Box>
     </>

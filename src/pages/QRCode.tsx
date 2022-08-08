@@ -1,5 +1,7 @@
-const QRCode = () => {
-  return <div>QRCode</div>;
+import QRCodeComponent from 'components/QRCode';
+
+const QRCodePage = () => {
+  return <QRCodeComponent />;
 };
 
-export default QRCode;
+export default QRCodePage;

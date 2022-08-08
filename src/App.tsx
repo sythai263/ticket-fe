@@ -2,18 +2,17 @@ import { Grid } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import { LinkProps } from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import QRCode from 'pages/QRCode';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import Navbar from 'components/Navbar';
+import vi from 'date-fns/locale/vi';
 import React from 'react';
 import {
   BrowserRouter,
   Link as RouterLink,
   LinkProps as RouterLinkProps,
-  Route,
-  Routes,
 } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Login from './pages/Login';
-import ProductPage from './pages/Products';
+import MainRoutes from 'routes/MainRoutes';
 const LinkBehavior = React.forwardRef<
   HTMLAnchorElement,
   Omit<RouterLinkProps, 'to'> & { href: RouterLinkProps['to'] }
@@ -60,17 +59,14 @@ const App: React.FC = () => (
   <>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <BrowserRouter>
-        <Navbar />
-        <Grid container justifyContent='center' marginTop={10}>
-          <Routes>
-            <Route path='/' element={<ProductPage />} />
-            <Route path='/dang-nhap' element={<Login />} />
-            <Route path='/qr-code' element={<QRCode />} />
-            <Route path='/san-pham' element={<ProductPage />} />
-          </Routes>
-        </Grid>
-      </BrowserRouter>
+      <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={vi}>
+        <BrowserRouter>
+          <Navbar />
+          <Grid container justifyContent='center' marginTop={2}>
+            <MainRoutes />
+          </Grid>
+        </BrowserRouter>
+      </LocalizationProvider>
     </ThemeProvider>
   </>
 );

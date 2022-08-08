@@ -19,7 +19,7 @@ const Navbar = () => {
     },
     {
       display: 'Quét mã',
-      slug: 'qr-code',
+      slug: 'nguoi-dung/qr-code',
     },
   ];
 
