@@ -16,12 +16,12 @@ const DrawerComp = () => {
 
   const pages = [
     {
-      display: 'Sản phẩm',
-      slug: 'san-pham',
+      display: 'Sự kiện',
+      slug: 'su-kien',
     },
     {
       display: 'Quét mã',
-      slug: 'qr-code',
+      slug: 'nguoi-dung/qr-code',
     },
   ];
   if (!isLoggedIn) {

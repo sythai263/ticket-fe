@@ -1,10 +1,10 @@
 import axiosClient from './axiosClient';
 
-const productApi = {
+const programApi = {
   getAll() {
-    const url = '/api/products';
+    const url = '/api/programs';
     return axiosClient.get(url);
   },
 };
 
-export default productApi;
+export default programApi;

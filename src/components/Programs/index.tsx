@@ -1,17 +1,17 @@
 import { CircularProgress, Grid } from '@mui/material';
 import { Container } from '@mui/system';
-import productApi from 'api/product.api';
-import Product from 'components/Product';
-import { ProductType } from 'constants/types/productType';
+import programApi from 'api/program.api';
+import Program from 'components/Program';
+import { ProgramType } from 'constants/types/productType';
 import { useEffect, useState } from 'react';
 
-const Products = () => {
-  const [products, setProducts] = useState(new Array<ProductType>());
+const Programs = () => {
+  const [programs, setPrograms] = useState(new Array<ProgramType>());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    productApi.getAll().then(response => {
-      setProducts(response.data.data);
+    programApi.getAll().then((response: any) => {
+      setPrograms(response.data.data);
       setLoading(false);
     });
   }, []);
@@ -20,9 +20,9 @@ const Products = () => {
       <Container>
         <Grid container spacing={2} alignItems='center' justifyContent='center'>
           {loading && <CircularProgress />}
-          {products.map(product => (
-            <Grid item xs={11} sm={5} md={3} lg={3} key={product.id}>
-              <Product {...product} />
+          {programs.map(program => (
+            <Grid item xs={11} sm={5} md={3} lg={3} key={program.id}>
+              <Program {...program} />
             </Grid>
           ))}
         </Grid>
@@ -31,4 +31,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Programs;

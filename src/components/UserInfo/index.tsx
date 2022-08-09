@@ -117,6 +117,7 @@ const UserInfoComponent = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
   return (
     <>
       <Card sx={{ minWidth: 275, padding: '30px' }}>
@@ -228,7 +229,6 @@ const UserInfoComponent = () => {
                   <InputLabel id='gender'>Giới tính</InputLabel>
                   <Select
                     labelId='gender'
-                    id='gender'
                     name='gender'
                     value={gender}
                     label='Giới tính'

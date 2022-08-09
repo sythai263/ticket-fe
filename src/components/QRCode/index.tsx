@@ -16,7 +16,6 @@ import api from '../../api/attendee.api';
 
 const QRCodeComponent = () => {
   const [data, setData] = useState('No result');
-  const [mount, setMount] = useState(true);
   const [open, setOpen] = useState(false);
   const [openSnack, setOpenSnack] = useState(false);
   const [typeNoti, setTypeNoti] = useState<AlertColor>('success');
@@ -41,8 +40,7 @@ const QRCodeComponent = () => {
 
   async function attendee() {
     try {
-      const response = await api.enroll(Number(program));
-      const { data } = response;
+      await api.enroll(Number(program));
       setMessage('Đã đăng ký thành công !');
       setTypeNoti('success');
       setOpenSnack(true);
@@ -72,9 +70,8 @@ const QRCodeComponent = () => {
           width: 400,
           height: 400,
         }}>
-        {mount && (
-          <QrReader delay={300} onError={handleError} onScan={handleScan} />
-        )}
+        <QrReader delay={300} onError={handleError} onScan={handleScan} />
+
         <Dialog
           open={open}
           onClose={handleClose}

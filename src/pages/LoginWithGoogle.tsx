@@ -42,9 +42,6 @@ const LoginWithGoogle = () => {
       setSuccess(true);
     }
   };
-  const handleClose = () => {
-    setOpenDialog(false);
-  };
   useEffect(() => {
     fetchData();
   });

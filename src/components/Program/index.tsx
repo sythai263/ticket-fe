@@ -4,20 +4,20 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import { ProductType } from 'constants/types/productType';
+import { ProgramType } from 'constants/types/productType';
 
-const Product = (product: ProductType) => {
+const Program = (program: ProgramType) => {
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
         component='img'
         height='140'
-        image={product.avatar}
-        alt={product.name}
+        image={program.avatar}
+        alt={program.name}
       />
       <CardContent>
         <Typography gutterBottom variant='h5' component='div'>
-          {product.name}
+          {program.name}
         </Typography>
         <Typography
           variant='body2'
@@ -26,15 +26,15 @@ const Product = (product: ProductType) => {
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
           }}>
-          {product.description}
+          {program.description}
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size='small'>Share</Button>
-        <Button size='small'>Learn More</Button>
+        <Button size='small'>Tham gia</Button>
+        <Button size='small'>Xem chi tiết</Button>
       </CardActions>
     </Card>
   );
 };
 
-export default Product;
+export default Program;

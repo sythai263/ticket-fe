@@ -14,8 +14,8 @@ const Navbar = () => {
   const isLoggedIn = user.id;
   const pages = [
     {
-      display: 'Sản phẩm',
-      slug: 'san-pham',
+      display: 'Sự kiện',
+      slug: 'su-kien',
     },
     {
       display: 'Quét mã',

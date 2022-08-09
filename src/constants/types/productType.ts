@@ -1,4 +1,4 @@
-export interface ProductType {
+export interface ProgramType {
   id?: number;
   name?: string;
   total?: number;

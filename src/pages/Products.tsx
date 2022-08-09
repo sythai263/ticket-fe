@@ -1,11 +1,11 @@
-import Products from 'components/Products';
+import Programs from 'components/Programs';
 
-const ProductPage = () => {
+const ProgramPage = () => {
   return (
     <>
-      <Products />
+      <Programs />
     </>
   );
 };
 
-export default ProductPage;
+export default ProgramPage;
