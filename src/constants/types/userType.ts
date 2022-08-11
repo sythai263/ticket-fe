@@ -24,4 +24,9 @@ export interface UserUpdate {
   avatar?: string;
   birthday?: Date | null;
 }
+export interface UserShort {
+  firstName: string;
+  lastName: string;
+  avatar: string;
+}
 export type { Account as default };

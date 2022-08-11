@@ -1,55 +1,50 @@
 import {
-  Alert,
-  AlertColor,
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Snackbar,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { useEffect, useState } from 'react';
+import { useAppDispatch } from 'app/hooks';
+import DialogComponent from 'components/DialogComponent';
+import SnackComponent from 'components/SnackComponent';
+import { SnackType } from 'constants/types/snackType';
+import {
+  hideLoading,
+  showAlert,
+  showLoading,
+} from 'features/notification/notiSlice';
+import { useState } from 'react';
 import QrReader from 'react-qr-reader';
 import api from '../../api/attendee.api';
 
 const QRCodeComponent = () => {
+  const dispatch = useAppDispatch();
   const [data, setData] = useState('No result');
   const [open, setOpen] = useState(false);
-  const [openSnack, setOpenSnack] = useState(false);
-  const [typeNoti, setTypeNoti] = useState<AlertColor>('success');
-  const [message, setMessage] = useState('');
   const [program, setProgram] = useState();
-
-  const handleCloseSnack = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnack(false);
-  };
-
-  useEffect(() => {}, [data]);
+  const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
 
   const handleClose = () => {
     setOpen(false);
   };
 
   async function attendee() {
+    dispatch(showLoading());
     try {
       await api.enroll(Number(program));
-      setMessage('Đã đăng ký thành công !');
-      setTypeNoti('success');
-      setOpenSnack(true);
-      setOpen(false);
+      setNoti({ color: 'success', message: 'Đã đăng ký thành công !' });
+      dispatch(hideLoading());
+      dispatch(showAlert());
     } catch (error: any) {
-      setMessage(String(error.response.data.message));
-      setTypeNoti('error');
-      setOpenSnack(true);
-      setOpen(false);
+      setNoti({
+        color: 'error',
+        message: String(error.response.data.message),
+      });
+      dispatch(hideLoading());
+      dispatch(showAlert());
     }
   }
 
@@ -92,18 +87,8 @@ const QRCodeComponent = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        <Snackbar
-          anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-          open={openSnack}
-          autoHideDuration={3000}
-          onClose={handleCloseSnack}>
-          <Alert
-            onClose={handleCloseSnack}
-            sx={{ width: '100%' }}
-            severity={typeNoti}>
-            {message}
-          </Alert>
-        </Snackbar>
+        <SnackComponent {...noti} />
+        <DialogComponent />
       </Box>
     </>
   );

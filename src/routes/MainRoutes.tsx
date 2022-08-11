@@ -1,4 +1,5 @@
 import PrivateRoutes from 'components/PrivateRoute';
+import DetailProgramPage from 'pages/DetailProgram';
 import Login from 'pages/Login';
 import LoginWithGoogle from 'pages/LoginWithGoogle';
 import PaymentSuccess from 'pages/PaymentSuccsess';
@@ -20,6 +21,8 @@ const MainRoutes = () => {
         <Route path='/dang-nhap-voi-google' element={<LoginWithGoogle />} />
         <Route path='/dang-nhap' element={<Login />} />
         <Route path='/su-kien' element={<ProgramPage />} />
+        <Route path='/su-kien/:id' element={<DetailProgramPage />} />
+
         <Route path='/da-thanh-toan' element={<PaymentSuccess />} />
       </Routes>
     </>

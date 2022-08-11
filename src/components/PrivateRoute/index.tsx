@@ -1,26 +1,15 @@
+import { useAppSelector } from 'app/hooks';
 import { Navigate, Outlet } from 'react-router-dom';
 type PrivateRouteType = {
   roleRequired?: 'Admin' | 'User';
 };
 
 const useAuth = () => {
-  const _user = localStorage.getItem('user');
-  let user: any;
-  if (_user) {
-    user = JSON.parse(_user);
-  }
-
-  if (user) {
-    return {
-      auth: true,
-      role: user.role,
-    };
-  } else {
-    return {
-      auth: false,
-      role: null,
-    };
-  }
+  const user = useAppSelector((state: any) => state.user);
+  return {
+    auth: user.isAuthentication,
+    role: user.current.role,
+  };
 };
 const PrivateRoutes = (props: PrivateRouteType) => {
   const { auth, role } = useAuth();

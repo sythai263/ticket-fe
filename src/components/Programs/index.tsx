@@ -18,7 +18,11 @@ const Programs = () => {
   return (
     <>
       <Container>
-        <Grid container spacing={2} alignItems='center' justifyContent='center'>
+        <Grid
+          container
+          spacing={2}
+          alignItems='stretch'
+          justifyContent='center'>
           {loading && <CircularProgress />}
           {programs.map(program => (
             <Grid item xs={11} sm={5} md={3} lg={3} key={program.id}>

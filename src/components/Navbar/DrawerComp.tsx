@@ -7,12 +7,15 @@ import {
   ListItemIcon,
 } from '@mui/material';
 import { useAppSelector } from 'app/hooks';
+import { logout } from 'features/login/userSlice';
 import React, { useState } from 'react';
 import { BiMenu } from 'react-icons/bi';
+import { useDispatch } from 'react-redux';
 
 const DrawerComp = () => {
   const user = useAppSelector((state: any) => state.user.current);
   const isLoggedIn = user.id;
+  const dispatch = useDispatch();
 
   const pages = [
     {
@@ -24,9 +27,12 @@ const DrawerComp = () => {
       slug: 'nguoi-dung/qr-code',
     },
   ];
+  const handleLogout = async () => {
+    dispatch(logout());
+  };
   if (!isLoggedIn) {
     pages.push({ display: 'Đăng nhập', slug: 'dang-nhap' });
-    pages.push({ display: 'Đăng ky', slug: 'dang-ky' });
+    pages.push({ display: 'Đăng ký', slug: 'dang-ky' });
   }
   const [openDrawer, setOpenDrawer] = useState(false);
   return (
@@ -47,6 +53,15 @@ const DrawerComp = () => {
               </ListItemIcon>
             </ListItemButton>
           ))}
+          {isLoggedIn && (
+            <ListItemButton
+              onClick={() => {
+                handleLogout();
+                setOpenDrawer(false);
+              }}>
+              Đăng xuất
+            </ListItemButton>
+          )}
         </List>
       </Drawer>
       <IconButton

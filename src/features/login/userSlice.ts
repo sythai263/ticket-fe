@@ -125,6 +125,10 @@ const userSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, { payload }) => {
         state.current = payload;
         state.isAuthentication = true;
+      })
+      .addCase(googleLogin.fulfilled, (state, { payload }) => {
+        state.current = payload;
+        state.isAuthentication = true;
       });
   },
 });

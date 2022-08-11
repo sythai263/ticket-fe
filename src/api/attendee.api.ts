@@ -6,8 +6,8 @@ const attendeeApi = {
     return axiosClient.post(url, { programId: id });
   },
   getAttendee(id: number) {
-    const url = `${baseApi}/${id}`;
-    return axiosClient.post(url);
+    const url = `${baseApi}/program/${id}`;
+    return axiosClient.get(url);
   },
 };
 

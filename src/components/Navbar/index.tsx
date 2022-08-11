@@ -2,9 +2,10 @@ import { Link, Tab, Tabs, useMediaQuery, useTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
+import { Box } from '@mui/system';
 import { useAppSelector } from 'app/hooks';
 import React, { useState } from 'react';
-import { BsCart, BsShop } from 'react-icons/bs';
+import { BsShop } from 'react-icons/bs';
 import AvatarNav from './Avatar';
 import DrawerComponent from './DrawerComp';
 const marginLeft = '20px';
@@ -53,19 +54,14 @@ const Navbar = () => {
                     href={page.slug}></Tab>
                 ))}
               </Tabs>
-              <Button
-                sx={{ marginLeft: 'auto' }}
-                color='inherit'
-                LinkComponent={Link}
-                href='gio-hang'>
-                <BsCart size={30} />
-              </Button>
               {isLoggedIn ? (
-                <AvatarNav />
+                <Box sx={{ marginLeft: 'auto' }}>
+                  <AvatarNav />
+                </Box>
               ) : (
                 <>
                   <Button
-                    sx={{ marginLeft }}
+                    sx={{ marginLeft: 'auto' }}
                     variant='contained'
                     LinkComponent={Link}
                     href='dang-nhap'>

@@ -1,39 +1,37 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
-  Alert,
-  AlertColor,
   Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
-  CircularProgress,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   Grid,
   IconButton,
   InputAdornment,
-  Snackbar,
   TextField,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAppDispatch } from 'app/hooks';
+import DialogComponent from 'components/DialogComponent';
+import SnackComponent from 'components/SnackComponent';
+import { SnackType } from 'constants/types/snackType';
+import { login } from 'features/login/userSlice';
+import {
+  hideLoading,
+  showAlert,
+  showLoading,
+} from 'features/notification/notiSlice';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { Navigate } from 'react-router-dom';
 import { ErrorType } from '../../constants/types/errorType';
-import { login } from '../../features/login/userSlice';
 
 const LoginComponent = () => {
   const google = `${process.env.REACT_APP_API_URL}api/google/auth`;
   const token = localStorage.getItem('token');
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [openSnack, setOpenSnack] = useState(false);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [typeNoti, setTypeNoti] = useState<AlertColor>('success');
-  const [message, setMessage] = useState('');
+  const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
   const [authenticate, setAuthenticate] = useState(token ? true : false);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -52,33 +50,21 @@ const LoginComponent = () => {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setOpenDialog(true);
+    dispatch(showLoading());
     const result = await dispatch(login(user));
     if (result.meta.requestStatus === 'rejected') {
       const err = result.payload as ErrorType;
       const mess = String(err.message);
       setAuthenticate(false);
-      setMessage(mess);
-      setTypeNoti('error');
-      setOpenSnack(true);
-      setOpenDialog(false);
+      setNoti({ color: 'error', message: mess });
+      dispatch(hideLoading());
+      dispatch(showAlert());
     } else {
       setAuthenticate(true);
-      setMessage('Đăng nhập thành công !');
-      setTypeNoti('success');
-      setOpenSnack(true);
-      setOpenDialog(false);
+      setNoti({ color: 'success', message: 'Đăng nhập thành công!' });
+      dispatch(hideLoading());
+      dispatch(showAlert());
     }
-  };
-
-  const handleCloseSnack = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnack(false);
   };
 
   if (authenticate) {
@@ -153,26 +139,8 @@ const LoginComponent = () => {
           </CardActions>
         </Box>
       </CardContent>
-      <Snackbar
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-        open={openSnack}
-        autoHideDuration={3000}
-        onClose={handleCloseSnack}>
-        <Alert
-          onClose={handleCloseSnack}
-          sx={{ width: '100%' }}
-          severity={typeNoti}>
-          {message}
-        </Alert>
-      </Snackbar>
-      <Dialog open={openDialog} fullWidth>
-        <DialogTitle />
-        <DialogContent>
-          <Box display='flex' justifyContent='center' alignItems='center'>
-            <CircularProgress />
-          </Box>
-        </DialogContent>
-      </Dialog>
+      <SnackComponent {...noti} />
+      <DialogComponent />
     </Card>
   );
 };
