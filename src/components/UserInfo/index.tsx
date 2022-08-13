@@ -1,20 +1,13 @@
 import {
-  Alert,
-  AlertColor,
   Avatar,
   Box,
   Button,
   Card,
   CardActions,
   CardContent,
-  CircularProgress,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   FormControl,
   Grid,
   InputLabel,
-  Snackbar,
   TextField,
   useMediaQuery,
   useTheme,
@@ -24,22 +17,26 @@ import Select from '@mui/material/Select';
 import { DatePicker } from '@mui/x-date-pickers';
 import userApi from 'api/user.api';
 import { useAppDispatch } from 'app/hooks';
+import DialogComponent from 'components/DialogComponent';
+import SnackComponent from 'components/SnackComponent';
 import { ErrorType } from 'constants/types/errorType';
+import { SnackType } from 'constants/types/snackType';
 import { User, UserUpdate } from 'constants/types/userType';
-import { updateUser } from 'features/login/userSlice';
+import {
+  hideLoading,
+  showAlert,
+  showLoading,
+} from 'features/notification/notiSlice';
+import { updateUser } from 'features/user/userSlice';
 import { useEffect, useState } from 'react';
 
 const UserInfoComponent = () => {
   const initial = { birthday: new Date() };
-  const [openDialog, setOpenDialog] = useState(true);
   const [allowUpdate, setAllowUpdate] = useState(true);
   const [gender, setGender] = useState('');
   const [user, setUser] = useState<User>(initial);
   const [birthday, setBirthday] = useState<Date | null | undefined>(new Date());
-  const [openSnack, setOpenSnack] = useState(false);
-  const [typeNoti, setTypeNoti] = useState<AlertColor>('success');
-  const [message, setMessage] = useState('');
-
+  const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -54,26 +51,16 @@ const UserInfoComponent = () => {
       setUser(usr);
       setGender(usr.gender);
       setBirthday(usr.birthday);
-      setOpenDialog(false);
+      dispatch(hideLoading());
     });
-  }, []);
-
-  const handleCloseSnack = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnack(false);
-  };
+  }, [dispatch]);
 
   const handleUpdate = async (e: any) => {
     e.preventDefault();
-    setOpenDialog(true);
+    dispatch(showLoading());
     if (allowUpdate) {
       setAllowUpdate(false);
-      setOpenDialog(false);
+      dispatch(hideLoading());
     } else {
       const info = {
         birthday: user.birthday,
@@ -87,16 +74,16 @@ const UserInfoComponent = () => {
       if (response.meta.requestStatus === 'rejected') {
         const err = response.payload as ErrorType;
         const mess = String(err.message);
-        setMessage(mess);
-        setTypeNoti('error');
-        setOpenSnack(true);
-        setOpenDialog(false);
+        setNoti({ color: 'error', message: mess });
+        dispatch(hideLoading());
+        dispatch(showAlert());
       } else {
-        setMessage('Cập nhật thông tin thành công!');
-        setTypeNoti('success');
-        setOpenSnack(true);
-        setOpenDialog(false);
-        setAllowUpdate(true);
+        setNoti({
+          color: 'success',
+          message: 'Cập nhật thông tin thành công!',
+        });
+        dispatch(hideLoading());
+        dispatch(showAlert());
       }
     }
   };
@@ -107,7 +94,6 @@ const UserInfoComponent = () => {
       setUser(usr);
       setGender(usr.gender);
       setBirthday(usr.birthday);
-      setOpenDialog(false);
       setAllowUpdate(true);
     });
   };
@@ -257,26 +243,8 @@ const UserInfoComponent = () => {
             </CardActions>
           </Box>
         </CardContent>
-        <Snackbar
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          open={openSnack}
-          autoHideDuration={3000}
-          onClose={handleCloseSnack}>
-          <Alert
-            onClose={handleCloseSnack}
-            sx={{ width: '100%' }}
-            severity={typeNoti}>
-            {message}
-          </Alert>
-        </Snackbar>
-        <Dialog open={openDialog} fullWidth>
-          <DialogTitle />
-          <DialogContent>
-            <Box display='flex' justifyContent='center' alignItems='center'>
-              <CircularProgress />
-            </Box>
-          </DialogContent>
-        </Dialog>
+        <SnackComponent {...noti} />
+        <DialogComponent />
       </Card>
     </>
   );

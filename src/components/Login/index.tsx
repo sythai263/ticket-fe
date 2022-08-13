@@ -15,12 +15,12 @@ import { useAppDispatch } from 'app/hooks';
 import DialogComponent from 'components/DialogComponent';
 import SnackComponent from 'components/SnackComponent';
 import { SnackType } from 'constants/types/snackType';
-import { login } from 'features/login/userSlice';
 import {
   hideLoading,
   showAlert,
   showLoading,
 } from 'features/notification/notiSlice';
+import { login } from 'features/user/userSlice';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { Navigate } from 'react-router-dom';

@@ -1,9 +1,13 @@
 import PrivateRoutes from 'components/PrivateRoute';
+import CheckInPage from 'pages/Admin/CheckIn';
+import DashboardPage from 'pages/Admin/DashboardPage';
+import ManageProgram from 'pages/Admin/ManageProgram';
+import SingleProgram from 'pages/Admin/SingleProgram';
 import DetailProgramPage from 'pages/DetailProgram';
 import Login from 'pages/Login';
 import LoginWithGoogle from 'pages/LoginWithGoogle';
 import PaymentSuccess from 'pages/PaymentSuccsess';
-import ProgramPage from 'pages/Products';
+import ProgramPage from 'pages/Programs';
 import QRCodePage from 'pages/QRCode';
 import UserInfoPage from 'pages/UserInfo';
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -17,11 +21,11 @@ const MainRoutes = () => {
           <Route path='thong-tin' element={<UserInfoPage />} />
         </Route>
         <Route path='admin' element={<PrivateRoutes roleRequired='Admin' />}>
-          <Route path='su-kien' element={<QRCodePage />} />
-          <Route path='su-kien/:id' element={<UserInfoPage />} />
-          <Route path='tong-quan' element={<UserInfoPage />} />
+          <Route path='su-kien' element={<ManageProgram />} />
+          <Route path='su-kien/:id' element={<SingleProgram />} />
+          <Route path='tong-quan' element={<DashboardPage />} />
           <Route path='them-su-kien' element={<UserInfoPage />} />
-          <Route path='check-in' element={<UserInfoPage />} />
+          <Route path='check-in' element={<CheckInPage />} />
         </Route>
         <Route path='/' element={<Navigate to='trang-chu' />} />
         <Route path='/trang-chu' element={<ProgramPage />} />

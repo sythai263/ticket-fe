@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { useAppDispatch } from 'app/hooks';
 import { ErrorType } from 'constants/types/errorType';
-import { googleLogin } from 'features/login/userSlice';
+import { googleLogin } from 'features/user/userSlice';
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 

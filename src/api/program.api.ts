@@ -1,8 +1,11 @@
+import QueryType from 'constants/types/queryType';
+import queryString from 'query-string';
 import axiosClient from './axiosClient';
 
 const programApi = {
-  getAll() {
-    const url = '/api/programs';
+  getAll(query: QueryType) {
+    const params = queryString.stringify(query);
+    const url = `/api/programs?${params}`;
     return axiosClient.get(url);
   },
   getDetail(id: number) {

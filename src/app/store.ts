@@ -1,11 +1,13 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import notiReducer from 'features/notification/notiSlice';
-import userReducer from '../features/login/userSlice';
+import programReducer from 'features/program/programSlice';
+import userReducer from 'features/user/userSlice';
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
     noti: notiReducer,
+    program: programReducer,
   },
 });
 

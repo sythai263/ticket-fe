@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import ReviewCard from 'components/ReviewCard';
-import { ProgramType } from 'constants/types/productType';
+import { ProgramType } from 'constants/types/programType';
 import moment from 'moment';
 import React, { useState } from 'react';
 import Carousel from 'react-material-ui-carousel';
@@ -29,7 +29,6 @@ const DetailProgramComponent = (program: ProgramType) => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const items = [program.avatar, program.imageQR];
   const [value, setValue] = useState(0);
-  const [progress, setProgress] = useState(program.total);
   const reviews = program.reviews ? program.reviews : [];
 
   function TabPanel(props: TabPanelProps) {
@@ -99,7 +98,7 @@ const DetailProgramComponent = (program: ProgramType) => {
             </Typography>
             <CardContent>
               <Box sx={{ width: '100%' }}>
-                <LinearProgress variant='determinate' value={progress} />
+                <LinearProgress variant='determinate' value={program.total} />
               </Box>
               <Typography
                 variant='body2'

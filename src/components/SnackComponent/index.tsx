@@ -6,7 +6,6 @@ import { hideAlert } from 'features/notification/notiSlice';
 const SnackComponent = (props: SnackType) => {
   const noti = useAppSelector((state: any) => state.noti);
   const dispatch = useAppDispatch();
-  dispatch(hideAlert());
 
   const handleCloseSnack = (
     event?: React.SyntheticEvent | Event,

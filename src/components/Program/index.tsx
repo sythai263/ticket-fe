@@ -20,7 +20,7 @@ import { useAppDispatch } from 'app/hooks';
 import { AxiosError, AxiosResponse } from 'axios';
 import SnackComponent from 'components/SnackComponent';
 import { ErrorType } from 'constants/types/errorType';
-import { ProgramType } from 'constants/types/productType';
+import { ProgramType } from 'constants/types/programType';
 import { SnackType } from 'constants/types/snackType';
 import { showAlert } from 'features/notification/notiSlice';
 import moment from 'moment';

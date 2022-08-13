@@ -6,7 +6,7 @@ import { Box } from '@mui/system';
 import { useAppSelector } from 'app/hooks';
 import { NavbarData } from 'app/navbar';
 import React from 'react';
-import { BsShop } from 'react-icons/bs';
+import { TiTicket } from 'react-icons/ti';
 import AvatarNav from './Avatar';
 import DrawerComponent from './DrawerComp';
 const marginLeft = '20px';
@@ -23,7 +23,7 @@ const Navbar = () => {
       <AppBar position='sticky'>
         <Toolbar>
           <Link href='/' color='inherit'>
-            <BsShop size={40} />
+            <TiTicket size={40} />
           </Link>
           {isMatch ? (
             <>

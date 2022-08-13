@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useAppSelector } from 'app/hooks';
 import { NavbarData } from 'app/navbar';
-import { logout } from 'features/login/userSlice';
+import { logout } from 'features/user/userSlice';
 import React, { useState } from 'react';
 import { BiMenu } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';

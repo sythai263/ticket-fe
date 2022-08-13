@@ -11,7 +11,7 @@ import { Box } from '@mui/system';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
-import { logout } from '../../features/login/userSlice';
+import { logout } from '../../features/user/userSlice';
 
 const AvatarNav = () => {
   const user = useAppSelector((state: any) => state.user);

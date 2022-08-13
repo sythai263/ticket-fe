@@ -9,6 +9,10 @@ const attendeeApi = {
     const url = `${baseApi}/program/${id}`;
     return axiosClient.get(url);
   },
+  checkIn(id: number) {
+    const url = `${baseApi}/${id}/check-in`;
+    return axiosClient.patch(url);
+  },
 };
 
 export default attendeeApi;
