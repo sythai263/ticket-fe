@@ -16,13 +16,19 @@ const MainRoutes = () => {
           <Route path='qr-code' element={<QRCodePage />} />
           <Route path='thong-tin' element={<UserInfoPage />} />
         </Route>
+        <Route path='admin' element={<PrivateRoutes roleRequired='Admin' />}>
+          <Route path='su-kien' element={<QRCodePage />} />
+          <Route path='su-kien/:id' element={<UserInfoPage />} />
+          <Route path='tong-quan' element={<UserInfoPage />} />
+          <Route path='them-su-kien' element={<UserInfoPage />} />
+          <Route path='check-in' element={<UserInfoPage />} />
+        </Route>
         <Route path='/' element={<Navigate to='trang-chu' />} />
         <Route path='/trang-chu' element={<ProgramPage />} />
         <Route path='/dang-nhap-voi-google' element={<LoginWithGoogle />} />
         <Route path='/dang-nhap' element={<Login />} />
         <Route path='/su-kien' element={<ProgramPage />} />
         <Route path='/su-kien/:id' element={<DetailProgramPage />} />
-
         <Route path='/da-thanh-toan' element={<PaymentSuccess />} />
       </Routes>
     </>

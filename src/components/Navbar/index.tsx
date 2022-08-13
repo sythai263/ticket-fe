@@ -1,10 +1,11 @@
-import { Link, Tab, Tabs, useMediaQuery, useTheme } from '@mui/material';
+import { Link, useMediaQuery, useTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import { Box } from '@mui/system';
 import { useAppSelector } from 'app/hooks';
-import React, { useState } from 'react';
+import { NavbarData } from 'app/navbar';
+import React from 'react';
 import { BsShop } from 'react-icons/bs';
 import AvatarNav from './Avatar';
 import DrawerComponent from './DrawerComp';
@@ -13,18 +14,7 @@ const marginLeft = '20px';
 const Navbar = () => {
   const user = useAppSelector((state: any) => state.user.current);
   const isLoggedIn = user.id;
-  const pages = [
-    {
-      display: 'Sự kiện',
-      slug: 'su-kien',
-    },
-    {
-      display: 'Quét mã',
-      slug: 'nguoi-dung/qr-code',
-    },
-  ];
-
-  const [value, setValue] = useState(0);
+  const pages = NavbarData();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -41,19 +31,17 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Tabs
-                sx={{ marginLeft: 'auto' }}
-                textColor='inherit'
-                value={value}
-                onChange={(e, value) => setValue(value)}>
-                {pages.map((page, index) => (
-                  <Tab
-                    key={index}
-                    label={page.display}
-                    LinkComponent={Link}
-                    href={page.slug}></Tab>
+              <Box
+                sx={{
+                  display: { xs: 'none', sm: 'block' },
+                  marginLeft: 'auto',
+                }}>
+                {pages.map(page => (
+                  <Button key={page.slug} color='inherit' href={page.slug}>
+                    {page.display}
+                  </Button>
                 ))}
-              </Tabs>
+              </Box>
               {isLoggedIn ? (
                 <Box sx={{ marginLeft: 'auto' }}>
                   <AvatarNav />

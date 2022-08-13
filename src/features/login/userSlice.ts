@@ -92,12 +92,12 @@ export const getUserInfo = createAsyncThunk(
     }
   }
 );
-
+const token = localStorage.getItem('token');
 const userSlice = createSlice({
   name: 'user',
   initialState: {
     current: JSON.parse(String(localStorage.getItem(StorageKeys.user))) || {},
-    isAuthentication: false,
+    isAuthentication: token ? true : false,
     info: {},
   },
   reducers: {

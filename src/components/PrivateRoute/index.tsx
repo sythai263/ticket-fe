@@ -13,8 +13,6 @@ const useAuth = () => {
 };
 const PrivateRoutes = (props: PrivateRouteType) => {
   const { auth, role } = useAuth();
-
-  //if the role required is there or not
   if (props.roleRequired) {
     return auth ? (
       props.roleRequired === role ? (

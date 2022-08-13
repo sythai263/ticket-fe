@@ -7,26 +7,18 @@ import {
   ListItemIcon,
 } from '@mui/material';
 import { useAppSelector } from 'app/hooks';
+import { NavbarData } from 'app/navbar';
 import { logout } from 'features/login/userSlice';
 import React, { useState } from 'react';
 import { BiMenu } from 'react-icons/bi';
 import { useDispatch } from 'react-redux';
 
 const DrawerComp = () => {
-  const user = useAppSelector((state: any) => state.user.current);
-  const isLoggedIn = user.id;
+  const user = useAppSelector((state: any) => state.user);
+  const isLoggedIn = user.isAuthentication;
   const dispatch = useDispatch();
 
-  const pages = [
-    {
-      display: 'Sự kiện',
-      slug: 'su-kien',
-    },
-    {
-      display: 'Quét mã',
-      slug: 'nguoi-dung/qr-code',
-    },
-  ];
+  const pages = NavbarData();
   const handleLogout = async () => {
     dispatch(logout());
   };
