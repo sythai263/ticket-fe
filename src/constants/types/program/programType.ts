@@ -7,6 +7,7 @@ export interface ProgramType {
   remain?: number;
   price?: number;
   starAvg?: number;
+  place?: string;
   startDate?: Date;
   endDate?: Date;
   avatar?: string;

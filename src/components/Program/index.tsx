@@ -128,6 +128,7 @@ const Program = (program: ProgramType) => {
         <Button size='small' href={`/su-kien/${program.id}`}>
           Xem chi tiết
         </Button>
+
         <Box display='flex'>
           <Box sx={{ m: 1, position: 'relative' }}>
             <Button

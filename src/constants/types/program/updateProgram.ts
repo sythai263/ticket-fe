@@ -3,6 +3,7 @@ export interface UpdateProgram {
   name: string;
   total: number;
   price: number;
+  place: string;
   startDate: Date;
   endDate: Date;
   avatar: string;

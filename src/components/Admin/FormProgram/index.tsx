@@ -57,13 +57,13 @@ const FormUpdateProgram = (id: IdType) => {
 
     const info = {
       id: id.id,
-      avatar: program.avatar,
       description: program.description,
       endDate: program.endDate,
       name: program.name,
-      price: program.price,
+      price: Number(program.price),
       startDate: program.startDate,
-      total: program.total,
+      total: Number(program.total),
+      place: program.place,
     } as UpdateProgram;
     dispatch(hideLoading());
 
@@ -133,6 +133,7 @@ const FormUpdateProgram = (id: IdType) => {
                 <TextField
                   name='total'
                   variant='outlined'
+                  type='number'
                   required
                   value={program.total}
                   onChange={inputHandle}
@@ -144,11 +145,22 @@ const FormUpdateProgram = (id: IdType) => {
                   name='price'
                   variant='outlined'
                   required
+                  type='number'
                   value={program.price}
                   onChange={inputHandle}
                   label='Giá'
                 />
               </Grid>
+            </Grid>
+            <Grid container display='flex'>
+              <TextField
+                variant='outlined'
+                required
+                fullWidth
+                id='name'
+                label='Địa điểm'
+                value={program.place}
+              />
             </Grid>
             <Grid
               container
