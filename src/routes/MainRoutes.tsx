@@ -4,6 +4,7 @@ import DashboardPage from 'pages/Admin/DashboardPage';
 import ManageProgram from 'pages/Admin/ManageProgram';
 import SingleProgram from 'pages/Admin/SingleProgram';
 import DetailProgramPage from 'pages/DetailProgram';
+import ListAttendee from 'pages/ListAtendee';
 import Login from 'pages/Login';
 import LoginWithGoogle from 'pages/LoginWithGoogle';
 import PaymentSuccess from 'pages/PaymentSuccsess';
@@ -19,6 +20,7 @@ const MainRoutes = () => {
         <Route path='nguoi-dung' element={<PrivateRoutes />}>
           <Route path='qr-code' element={<QRCodePage />} />
           <Route path='thong-tin' element={<UserInfoPage />} />
+          <Route path='tham-gia' element={<ListAttendee />} />
         </Route>
         <Route path='admin' element={<PrivateRoutes roleRequired='Admin' />}>
           <Route path='su-kien' element={<ManageProgram />} />

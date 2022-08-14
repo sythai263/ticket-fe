@@ -13,6 +13,7 @@ const marginLeft = '20px';
 
 const Navbar = () => {
   const user = useAppSelector((state: any) => state.user.current);
+  const navActive = useAppSelector((state: any) => state.navbar.active);
   const isLoggedIn = user.id;
   const pages = NavbarData();
   const theme = useTheme();
@@ -33,11 +34,14 @@ const Navbar = () => {
             <>
               <Box
                 sx={{
-                  display: { xs: 'none', sm: 'block' },
+                  display: { xs: 'none', sm: 'flex' },
                   marginLeft: 'auto',
                 }}>
                 {pages.map(page => (
-                  <Button key={page.slug} color='inherit' href={page.slug}>
+                  <Button
+                    key={page.id}
+                    color={navActive === page.id ? 'primary' : 'inherit'}
+                    href={page.slug}>
                     {page.display}
                   </Button>
                 ))}

@@ -1,14 +1,13 @@
 import { useAppDispatch } from 'app/hooks';
-import CardDashboard from 'components/Admin/CardDashboard';
 import { setActive } from 'features/navbar/navbarSlice';
 import { useEffect } from 'react';
 
-const DashboardPage = () => {
+const ListAttendee = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(setActive(4));
+    dispatch(setActive(3));
   });
-  return <CardDashboard />;
+  return <div>DetailRegister</div>;
 };
 
-export default DashboardPage;
+export default ListAttendee;

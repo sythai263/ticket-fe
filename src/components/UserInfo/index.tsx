@@ -28,29 +28,31 @@ import {
   showLoading,
 } from 'features/notification/notiSlice';
 import { updateUser } from 'features/user/userSlice';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 const UserInfoComponent = () => {
-  const initial = { birthday: new Date() };
   const [allowUpdate, setAllowUpdate] = useState(true);
-  const [gender, setGender] = useState('');
-  const [user, setUser] = useState<User>(initial);
-  const [birthday, setBirthday] = useState<Date | null | undefined>(new Date());
+  const [user, setUser] = useState<User>({
+    avatar: '',
+    birthday: new Date(),
+    email: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    gender: 'Male',
+    username: '',
+  });
   const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const handleChange = (newValue: Date | null) => {
-    setBirthday(newValue);
-  };
   useEffect(() => {
     userApi.getUser().then(response => {
       const { data } = response;
-      const usr = { ...response.data, birthday: new Date(data.birthday) };
+      const usr = { ...data };
       setUser(usr);
-      setGender(usr.gender);
-      setBirthday(usr.birthday);
       dispatch(hideLoading());
     });
   }, [dispatch]);
@@ -89,11 +91,8 @@ const UserInfoComponent = () => {
   };
   const resetForm = () => {
     userApi.getUser().then(response => {
-      const { data } = response;
-      const usr = { ...response.data, birthday: new Date(data.birthday) };
+      const usr = { ...response.data };
       setUser(usr);
-      setGender(usr.gender);
-      setBirthday(usr.birthday);
       setAllowUpdate(true);
     });
   };
@@ -201,9 +200,14 @@ const UserInfoComponent = () => {
                   label='Ngày sinh'
                   openTo='year'
                   views={['year', 'month', 'day']}
-                  value={birthday}
+                  value={user.birthday}
                   maxDate={new Date()}
-                  onChange={handleChange}
+                  onChange={(date: Date | null) => {
+                    setUser({
+                      ...user,
+                      birthday: moment(date).toDate(),
+                    });
+                  }}
                   disabled={allowUpdate}
                   renderInput={params => (
                     <TextField {...params} name='birthday' variant='outlined' />
@@ -216,7 +220,7 @@ const UserInfoComponent = () => {
                   <Select
                     labelId='gender'
                     name='gender'
-                    value={gender}
+                    value={user.gender}
                     label='Giới tính'
                     sx={{ m: 1 }}
                     disabled={allowUpdate}

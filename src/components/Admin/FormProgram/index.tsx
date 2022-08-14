@@ -30,7 +30,13 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 const FormUpdateProgram = (id: IdType) => {
-  const [program, setProgram] = useState<ProgramType>({});
+  const [program, setProgram] = useState<ProgramType>({
+    description: '',
+    name: '',
+    price: 0,
+    place: '',
+    total: 0,
+  });
   const [reset, setReset] = useState(false);
   const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
   const theme = useTheme();
@@ -120,7 +126,8 @@ const FormUpdateProgram = (id: IdType) => {
                 variant='outlined'
                 required
                 fullWidth
-                id='name'
+                onChange={inputHandle}
+                name='name'
                 label='Tên sự kiện'
                 value={program.name}
               />
@@ -157,8 +164,9 @@ const FormUpdateProgram = (id: IdType) => {
                 variant='outlined'
                 required
                 fullWidth
-                id='name'
+                name='place'
                 label='Địa điểm'
+                onChange={inputHandle}
                 value={program.place}
               />
             </Grid>
@@ -172,7 +180,10 @@ const FormUpdateProgram = (id: IdType) => {
                   label='Bắt đầu'
                   value={program.startDate}
                   onChange={(date: Date | null) => {
-                    program.startDate = moment(date).toDate();
+                    setProgram({
+                      ...program,
+                      startDate: moment(date).toDate(),
+                    });
                   }}
                   renderInput={params => (
                     <TextField
@@ -189,7 +200,10 @@ const FormUpdateProgram = (id: IdType) => {
                   label='Kết thúc'
                   value={program.endDate}
                   onChange={(date: Date | null) => {
-                    program.endDate = moment(date).toDate();
+                    setProgram({
+                      ...program,
+                      endDate: moment(date).toDate(),
+                    });
                   }}
                   renderInput={params => (
                     <TextField {...params} name='endDate' variant='outlined' />
@@ -203,8 +217,9 @@ const FormUpdateProgram = (id: IdType) => {
                 required
                 fullWidth
                 multiline
-                id='description'
+                name='description'
                 label='Mô tả'
+                onChange={inputHandle}
                 value={program.description}
               />
             </Grid>

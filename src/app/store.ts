@@ -1,4 +1,5 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
+import navbarReducer from 'features/navbar/navbarSlice';
 import notiReducer from 'features/notification/notiSlice';
 import programReducer from 'features/program/programSlice';
 import userReducer from 'features/user/userSlice';
@@ -8,6 +9,7 @@ export const store = configureStore({
     user: userReducer,
     noti: notiReducer,
     program: programReducer,
+    navbar: navbarReducer,
   },
 });
 

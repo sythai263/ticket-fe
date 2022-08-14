@@ -10,11 +10,17 @@ import {
   Grid,
   IconButton,
 } from '@mui/material';
-import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useAppDispatch } from 'app/hooks';
+import { setActive } from 'features/navbar/navbarSlice';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PaymentSuccess = () => {
-  const [back, setBack] = useState(false);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(setActive(-1));
+  });
+  const navigate = useNavigate();
 
   return (
     <Grid container>
@@ -42,14 +48,13 @@ const PaymentSuccess = () => {
               variant='contained'
               color='success'
               onClick={() => {
-                setBack(true);
+                navigate('/trang-chu');
               }}>
               Về trang chủ
             </Button>
           </Grid>
         </DialogActions>
       </Dialog>
-      {back && <Navigate to='/trang-chu' />}
     </Grid>
   );
 };
