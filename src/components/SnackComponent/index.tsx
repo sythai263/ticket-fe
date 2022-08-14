@@ -1,6 +1,6 @@
 import { Alert, Snackbar } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { SnackType } from 'constants/types/snackType';
+import { SnackType } from 'constants/types/notification/snackType';
 import { hideAlert } from 'features/notification/notiSlice';
 
 const SnackComponent = (props: SnackType) => {

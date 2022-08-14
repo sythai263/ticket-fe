@@ -10,9 +10,7 @@ const CardDashboard = () => {
   return (
     <Card>
       <CardHeader title={<Typography variant='h5'>title</Typography>} />
-
       <Divider />
-
       <CardContent></CardContent>
     </Card>
   );

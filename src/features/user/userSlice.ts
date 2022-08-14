@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import userAPI from '../../api/user.api';
-import StorageKeys from '../../constants/storage-keys';
-import Account, { User, UserUpdate } from '../../constants/types/userType';
+import userAPI from 'api/user.api';
+import StorageKeys from 'constants/storage-keys';
+import Account, { User, UserUpdate } from 'constants/types/user/userType';
 const initialState: User = {};
 
 export const login = createAsyncThunk(

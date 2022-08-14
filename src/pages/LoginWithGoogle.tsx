@@ -13,7 +13,7 @@ import {
   IconButton,
 } from '@mui/material';
 import { useAppDispatch } from 'app/hooks';
-import { ErrorType } from 'constants/types/errorType';
+import { ErrorType } from 'constants/types/notification/errorType';
 import { googleLogin } from 'features/user/userSlice';
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';

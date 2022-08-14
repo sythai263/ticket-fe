@@ -10,7 +10,7 @@ import { Box } from '@mui/system';
 import { useAppDispatch } from 'app/hooks';
 import DialogComponent from 'components/DialogComponent';
 import SnackComponent from 'components/SnackComponent';
-import { SnackType } from 'constants/types/snackType';
+import { SnackType } from 'constants/types/notification/snackType';
 import {
   hideLoading,
   showAlert,

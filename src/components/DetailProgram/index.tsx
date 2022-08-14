@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import ReviewCard from 'components/ReviewCard';
-import { ProgramType } from 'constants/types/programType';
+import { ProgramType } from 'constants/types/program/programType';
 import moment from 'moment';
 import React, { useState } from 'react';
 import Carousel from 'react-material-ui-carousel';

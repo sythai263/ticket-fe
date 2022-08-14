@@ -19,9 +19,9 @@ import userApi from 'api/user.api';
 import { useAppDispatch } from 'app/hooks';
 import DialogComponent from 'components/DialogComponent';
 import SnackComponent from 'components/SnackComponent';
-import { ErrorType } from 'constants/types/errorType';
-import { SnackType } from 'constants/types/snackType';
-import { User, UserUpdate } from 'constants/types/userType';
+import { ErrorType } from 'constants/types/notification/errorType';
+import { SnackType } from 'constants/types/notification/snackType';
+import { User, UserUpdate } from 'constants/types/user/userType';
 import {
   hideLoading,
   showAlert,

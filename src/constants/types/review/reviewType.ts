@@ -1,4 +1,4 @@
-import { UserShort } from './userType';
+import { UserShort } from '../user/userType';
 
 export interface Review {
   id?: number;

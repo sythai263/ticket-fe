@@ -4,7 +4,7 @@ import programApi from 'api/program.api';
 import { useAppSelector } from 'app/hooks';
 import { AxiosResponse } from 'axios';
 import Program from 'components/Program';
-import { ProgramType } from 'constants/types/programType';
+import { ProgramType } from 'constants/types/program/programType';
 import QueryType from 'constants/types/queryType';
 import { useEffect, useState } from 'react';
 

@@ -1,4 +1,4 @@
-import { Review } from './reviewType';
+import { Review } from '../review/reviewType';
 
 export interface ProgramType {
   id?: number;

@@ -11,7 +11,7 @@ import api from 'api/program.api';
 import { useAppSelector } from 'app/hooks';
 import { AxiosResponse } from 'axios';
 import Meta from 'constants/types/Meta';
-import { ProgramType } from 'constants/types/programType';
+import { ProgramType } from 'constants/types/program/programType';
 import QueryType from 'constants/types/queryType';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
@@ -164,6 +164,7 @@ export default function ListProgram() {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage='Số hàng / trang'
       />
     </Paper>
   );

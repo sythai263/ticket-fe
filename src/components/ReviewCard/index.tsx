@@ -6,7 +6,7 @@ import {
   Rating,
   Typography,
 } from '@mui/material';
-import { Review } from 'constants/types/reviewType';
+import { Review } from 'constants/types/review/reviewType';
 import moment from 'moment';
 
 const ReviewCard = (review: Review) => {

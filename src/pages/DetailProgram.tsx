@@ -1,7 +1,7 @@
 import api from 'api/program.api';
 import { AxiosResponse } from 'axios';
 import DetailProgramComponent from 'components/DetailProgram';
-import { ProgramType } from 'constants/types/programType';
+import { ProgramType } from 'constants/types/program/programType';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 

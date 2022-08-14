@@ -1,5 +1,5 @@
 import { NavType } from 'constants/types/NavbarType';
-import { RoleType } from 'constants/types/RoleEnum';
+import { RoleType } from 'constants/types/user/RoleEnum';
 import { useAppSelector } from './hooks';
 
 export const NavbarData = (): NavType[] => {

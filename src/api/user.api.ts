@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Account, { UserUpdate } from '../constants/types/userType';
+import Account, { UserUpdate } from 'constants/types/user/userType';
 import axiosClient from './axiosClient';
 
 const userApi = {

@@ -14,7 +14,7 @@ import { Box } from '@mui/system';
 import { useAppDispatch } from 'app/hooks';
 import DialogComponent from 'components/DialogComponent';
 import SnackComponent from 'components/SnackComponent';
-import { SnackType } from 'constants/types/snackType';
+import { SnackType } from 'constants/types/notification/snackType';
 import {
   hideLoading,
   showAlert,
@@ -24,7 +24,7 @@ import { login } from 'features/user/userSlice';
 import { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
 import { Navigate } from 'react-router-dom';
-import { ErrorType } from '../../constants/types/errorType';
+import { ErrorType } from '../../constants/types/notification/errorType';
 
 const LoginComponent = () => {
   const google = `${process.env.REACT_APP_API_URL}api/google/auth`;
