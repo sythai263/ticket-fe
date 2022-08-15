@@ -35,6 +35,10 @@ const userApi = {
     const response = await axiosClient.get(url);
     return response;
   },
+  getAttendee() {
+    const url = `api/user/attendees`;
+    return axiosClient.get(url);
+  },
 };
 
 export default userApi;
