@@ -1,10 +1,10 @@
 import { InvoiceType } from '../invoice/invoiceType';
 import { ProgramType } from '../program/programType';
-import userType from '../user/userType';
+import { UserShort } from '../user/userType';
 
 export interface AttendeeType {
   id: number;
-  user: userType;
+  user: UserShort;
   program: ProgramType;
   invoice: InvoiceType;
   imageQR: string;

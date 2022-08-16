@@ -14,6 +14,7 @@ export interface User {
   avatar?: string;
   birthday?: Date | null;
   role?: string;
+  token?: string;
 }
 export interface UserUpdate {
   firstName?: string;

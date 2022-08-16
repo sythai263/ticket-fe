@@ -1,5 +1,7 @@
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {
   Box,
   Button,
@@ -12,18 +14,25 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   Typography,
 } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import api from 'api/user.api';
+import api from 'api/program.api';
+import { useAppSelector } from 'app/hooks';
 import { AxiosResponse } from 'axios';
 import { AttendeeType } from 'constants/types/attendee/attendeeType';
+import QueryAttendee from 'constants/types/attendee/searchAttendee';
+import { IdType } from 'constants/types/idType';
+import Meta from 'constants/types/Meta';
 import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 const baseURL = process.env.REACT_APP_API_URL;
+
+interface GetList {
+  data: AttendeeType[];
+  meta: Meta;
+}
 
 function Row(props: { row: AttendeeType }) {
   const { row } = props;
@@ -41,9 +50,9 @@ function Row(props: { row: AttendeeType }) {
           </IconButton>
         </TableCell>
         <TableCell component='th' scope='row'>
-          {row.program.name}
+          {`${row.user.lastName} ${row.user.firstName}`}
         </TableCell>
-        <TableCell align='right'>
+        <TableCell align='center'>
           {Number(row.program.price).toLocaleString('vi', {
             style: 'currency',
             currency: 'VND',
@@ -65,7 +74,7 @@ function Row(props: { row: AttendeeType }) {
             <CancelRoundedIcon color='error' />
           )}
         </TableCell>
-        <TableCell align='right'>
+        <TableCell align='center'>
           <img src={row.imageQR} alt='QRCode' style={{ height: '100px' }} />
         </TableCell>
       </TableRow>
@@ -185,15 +194,45 @@ function Row(props: { row: AttendeeType }) {
     </React.Fragment>
   );
 }
-const ListAttendeeComponent = () => {
-  const [data, setData] = useState<AttendeeType[]>([]);
+
+const ListAttendeeComponent = (d: IdType) => {
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const refresh = useAppSelector((state: any) => state.program.refresh);
+  const [list, setList] = useState<GetList>({
+    data: [],
+    meta: {
+      hasNextPage: false,
+      hasPreviousPage: false,
+      itemCount: 0,
+      page: 1,
+      pageCount: 0,
+      take: 10,
+    },
+  });
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   useEffect(() => {
-    api.getAttendee().then((response: AxiosResponse) => {
-      const payload = response.data as AttendeeType[];
-      setData(payload);
-      console.log(payload);
+    const query = {
+      page: page + 1,
+      take: rowsPerPage,
+      order: 'DESC',
+    } as QueryAttendee;
+    api.getAttendees(d.id, query).then((response: AxiosResponse) => {
+      const payload = response.data as GetList;
+      setList(payload);
     });
-  }, []);
+  }, [page, rowsPerPage, refresh]);
   return (
     <Container>
       <TableContainer component={Paper}>
@@ -201,7 +240,7 @@ const ListAttendeeComponent = () => {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell align='center'>Tên sự kiện</TableCell>
+              <TableCell align='left'>Họ tên</TableCell>
               <TableCell align='center'>Phí</TableCell>
               <TableCell align='center'>Thanh toán</TableCell>
               <TableCell align='center'>Check in</TableCell>
@@ -209,16 +248,26 @@ const ListAttendeeComponent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.length > 0 ? (
-              data.map(row => <Row key={row.id} row={row} />)
+            {list.data.length > 0 ? (
+              list.data.map(row => <Row key={row.id} row={row} />)
             ) : (
               <Typography>
-                Bạn chưa đăng ký tham gia sự kiên nào, Hãy tham gia ngay nhé!
+                Chưa có ai đăng ký tham gia chương trình này!
               </Typography>
             )}
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component='div'
+        count={list.meta.pageCount}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage='Số hàng / trang'
+      />
     </Container>
   );
 };

@@ -4,7 +4,7 @@ import { setActive } from 'features/navbar/navbarSlice';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-const SingleProgram = () => {
+const UpdateProgram = () => {
   const dispatch = useAppDispatch();
   const params = useParams();
   const id = Number(params.id);
@@ -14,4 +14,4 @@ const SingleProgram = () => {
   return <FormUpdateProgram id={id} />;
 };
 
-export default SingleProgram;
+export default UpdateProgram;

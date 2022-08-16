@@ -39,6 +39,7 @@ export const googleLogin = createAsyncThunk(
         avatar: data.avatar,
         role: data.role,
         id: data.id,
+        token: data.token,
       };
       localStorage.setItem(StorageKeys.user, JSON.stringify(user));
       return user;
@@ -60,6 +61,7 @@ export const updateUser = createAsyncThunk(
         avatar: data.avatar,
         role: data.role,
         id: data.id,
+        token: data.token,
       };
       localStorage.setItem(StorageKeys.user, JSON.stringify(user));
       return user;
@@ -97,6 +99,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState: {
     current: JSON.parse(String(localStorage.getItem(StorageKeys.user))) || {},
+    token: localStorage.getItem(StorageKeys.token),
     isAuthentication: token ? true : false,
     info: {},
   },
@@ -105,6 +108,7 @@ const userSlice = createSlice({
       //clear local storage
       state.current = initialState;
       state.isAuthentication = false;
+      state.token = '';
       localStorage.removeItem(StorageKeys.token);
       localStorage.removeItem(StorageKeys.user);
     },
@@ -115,11 +119,14 @@ const userSlice = createSlice({
         state.info = payload;
       })
       .addCase(login.fulfilled, (state, { payload }) => {
+        state.token = payload.token ? String(payload.token) : '';
+        payload.token = undefined;
         state.current = payload;
         state.isAuthentication = true;
       })
       .addCase(login.rejected, (state, error) => {
         state.current = initialState;
+        state.token = '';
         state.isAuthentication = false;
       })
       .addCase(updateUser.fulfilled, (state, { payload }) => {
@@ -127,6 +134,8 @@ const userSlice = createSlice({
         state.isAuthentication = true;
       })
       .addCase(googleLogin.fulfilled, (state, { payload }) => {
+        state.token = payload.token ? String(payload.token) : '';
+        payload.token = undefined;
         state.current = payload;
         state.isAuthentication = true;
       });

@@ -1,3 +1,4 @@
+import QueryAttendee from 'constants/types/attendee/searchAttendee';
 import { CreateProgram } from 'constants/types/program/createProgram';
 import { UpdateProgram } from 'constants/types/program/updateProgram';
 import QueryType from 'constants/types/queryType';
@@ -9,6 +10,11 @@ const programApi = {
   getAll(query: QueryType) {
     const params = queryString.stringify(query);
     const url = `${baseURL}?${params}`;
+    return axiosClient.get(url);
+  },
+  getAttendees(id: number, query?: QueryAttendee) {
+    const params = queryString.stringify(query ? query : {});
+    const url = `${baseURL}/${id}/attendees?${params}`;
     return axiosClient.get(url);
   },
   getDetail(id: number) {

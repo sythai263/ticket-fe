@@ -1,4 +1,4 @@
-import { Link } from '@mui/material';
+import { Button, Grid, Link } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,6 +15,8 @@ import { ProgramType } from 'constants/types/program/programType';
 import QueryType from 'constants/types/queryType';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { AiOutlineDelete } from 'react-icons/ai';
+import { BiEdit } from 'react-icons/bi';
 
 interface GetList {
   data: ProgramType[];
@@ -22,7 +24,15 @@ interface GetList {
 }
 
 interface Column {
-  id: 'id' | 'name' | 'startDate' | 'endDate' | 'price' | 'total' | 'remain';
+  id:
+    | 'id'
+    | 'name'
+    | 'startDate'
+    | 'endDate'
+    | 'price'
+    | 'total'
+    | 'remain'
+    | 'action';
   label: string;
   minWidth?: number;
   align?: 'right';
@@ -57,6 +67,12 @@ const columns: readonly Column[] = [
     id: 'remain',
     label: 'Còn lại',
     minWidth: 70,
+    align: 'right',
+  },
+  {
+    id: 'action',
+    label: 'Hành động',
+    minWidth: 50,
     align: 'right',
   },
 ];
@@ -149,6 +165,26 @@ export default function ListProgram() {
                     </TableCell>
                     <TableCell align='right'>
                       {row.remain?.toLocaleString('vi-VN')}
+                    </TableCell>
+                    <TableCell align='center'>
+                      <Grid container direction='column' spacing={2}>
+                        <Grid item>
+                          <Button
+                            size='small'
+                            variant='contained'
+                            href={`/admin/su-kien/chinh-sua/${row.id}`}>
+                            <BiEdit size={18} />
+                          </Button>
+                        </Grid>
+                        <Grid item>
+                          <Button
+                            size='small'
+                            variant='contained'
+                            color='error'>
+                            <AiOutlineDelete size={18} />
+                          </Button>
+                        </Grid>
+                      </Grid>
                     </TableCell>
                   </TableRow>
                 );
