@@ -2,6 +2,7 @@ import { Alert, Snackbar } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { SnackType } from 'constants/types/notification/snackType';
 import { hideAlert } from 'features/notification/notiSlice';
+import { useEffect } from 'react';
 
 const SnackComponent = (props: SnackType) => {
   const noti = useAppSelector((state: any) => state.noti);
@@ -16,7 +17,9 @@ const SnackComponent = (props: SnackType) => {
     }
     dispatch(hideAlert());
   };
-
+  useEffect(() => {
+    dispatch(hideAlert());
+  }, [dispatch]);
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

@@ -4,7 +4,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {
   Box,
-  Button,
   Collapse,
   Container,
   IconButton,
@@ -27,7 +26,6 @@ import { IdType } from 'constants/types/idType';
 import Meta from 'constants/types/Meta';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-const baseURL = process.env.REACT_APP_API_URL;
 
 interface GetList {
   data: AttendeeType[];
@@ -62,9 +60,7 @@ function Row(props: { row: AttendeeType }) {
           {row.invoice.isPaid ? (
             <CheckCircleIcon color='success' />
           ) : (
-            <a href={`${baseURL}api/payment/invoice/${row.invoice.id}`}>
-              <Button variant='contained'>Thanh toán</Button>
-            </a>
+            <CancelRoundedIcon color='error' />
           )}
         </TableCell>
         <TableCell align='center'>
@@ -232,7 +228,7 @@ const ListAttendeeComponent = (d: IdType) => {
       const payload = response.data as GetList;
       setList(payload);
     });
-  }, [page, rowsPerPage, refresh]);
+  }, [page, rowsPerPage, refresh, d.id]);
   return (
     <Container>
       <TableContainer component={Paper}>

@@ -5,7 +5,10 @@ import {
   Card,
   CardActions,
   CardContent,
+  FormControlLabel,
+  FormGroup,
   Grid,
+  Switch,
   TextField,
   useMediaQuery,
   useTheme,
@@ -37,6 +40,7 @@ const FormUpdateProgram = (id: IdType) => {
     place: '',
     total: 0,
   });
+  const [checked, setChecked] = useState(false);
   const [reset, setReset] = useState(false);
   const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
   const theme = useTheme();
@@ -50,12 +54,13 @@ const FormUpdateProgram = (id: IdType) => {
       .then((response: AxiosResponse) => {
         const data = response.data as ProgramType;
         setProgram(data);
+        setChecked(Boolean(program.allowCheckIn));
         dispatch(hideLoading());
       })
       .catch(err => {
         dispatch(hideLoading());
       });
-  }, [id.id, reset, dispatch]);
+  }, [id.id, reset, dispatch, program.allowCheckIn]);
 
   const handleUpdate = async (e: any) => {
     e.preventDefault();
@@ -92,6 +97,32 @@ const FormUpdateProgram = (id: IdType) => {
       });
   };
 
+  const handleChangeStatus = () => {
+    dispatch(showLoading());
+    api
+      .changeStatus(id.id)
+      .then((response: AxiosResponse) => {
+        setNoti({
+          color: 'success',
+          message: 'Đã thay đổi trạng thái check in !',
+        });
+        const data = response.data as ProgramType;
+        setProgram(data);
+        setChecked(Boolean(program.allowCheckIn));
+        dispatch(showAlert());
+        dispatch(hideLoading());
+      })
+      .catch((err: AxiosError) => {
+        setChecked(false);
+        const data = err.response?.data as ErrorType;
+        const mess = data.message;
+        setChecked(Boolean(program.allowCheckIn));
+        setNoti({ color: 'error', message: String(mess) });
+        dispatch(showAlert());
+        dispatch(hideLoading());
+      });
+  };
+
   const inputHandle = (e: any) => {
     setProgram(() => ({
       ...program,
@@ -121,6 +152,17 @@ const FormUpdateProgram = (id: IdType) => {
                 sx={{ width: '200px', height: '200px' }}
               />
             </Box>
+            <Grid container display='flex'>
+              <FormGroup>
+                <FormControlLabel
+                  labelPlacement='start'
+                  control={
+                    <Switch checked={checked} onChange={handleChangeStatus} />
+                  }
+                  label='Cho phép check in'
+                />
+              </FormGroup>
+            </Grid>
             <Grid container display='flex'>
               <TextField
                 variant='outlined'

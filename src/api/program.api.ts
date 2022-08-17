@@ -12,6 +12,10 @@ const programApi = {
     const url = `${baseURL}?${params}`;
     return axiosClient.get(url);
   },
+  changeStatus(id: number) {
+    const url = `${baseURL}/${id}/status`;
+    return axiosClient.patch(url);
+  },
   getAttendees(id: number, query?: QueryAttendee) {
     const params = queryString.stringify(query ? query : {});
     const url = `${baseURL}/${id}/attendees?${params}`;

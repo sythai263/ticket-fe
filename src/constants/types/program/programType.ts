@@ -13,5 +13,6 @@ export interface ProgramType {
   avatar?: string;
   description?: string;
   imageQR?: string;
+  allowCheckIn?: boolean;
   reviews?: Review[];
 }

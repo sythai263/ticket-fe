@@ -1,10 +1,10 @@
 import {
-	Drawer,
-	IconButton,
-	Link,
-	List,
-	ListItemButton,
-	ListItemIcon
+  Drawer,
+  IconButton,
+  Link,
+  List,
+  ListItemButton,
+  ListItemIcon,
 } from '@mui/material';
 import { useAppSelector } from 'app/hooks';
 import { NavbarData } from 'app/navbar';
@@ -23,8 +23,8 @@ const DrawerComp = () => {
     dispatch(logout());
   };
   if (!isLoggedIn) {
-    pages.push({ id:100,display: 'Đăng nhập', slug: 'dang-nhap' });
-    pages.push({ id:101,display: 'Đăng ký', slug: 'dang-ky' });
+    pages.push({ id: 100, display: 'Đăng nhập', slug: 'dang-nhap' });
+    pages.push({ id: 101, display: 'Đăng ký', slug: 'dang-ky' });
   }
   const [openDrawer, setOpenDrawer] = useState(false);
   return (

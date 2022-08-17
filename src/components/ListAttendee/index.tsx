@@ -191,7 +191,6 @@ const ListAttendeeComponent = () => {
     api.getAttendee().then((response: AxiosResponse) => {
       const payload = response.data as AttendeeType[];
       setData(payload);
-      console.log(payload);
     });
   }, []);
   return (
