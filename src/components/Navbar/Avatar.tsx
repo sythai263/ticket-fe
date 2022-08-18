@@ -9,26 +9,31 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { logout } from '../../features/user/userSlice';
 
 const AvatarNav = () => {
   const user = useAppSelector((state: any) => state.user);
   const dispatch = useAppDispatch();
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [isLogout, setLogout] = useState(user.isAuthenticate);
+  const navigate = useNavigate();
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+  useEffect(() => {
+    if (user.isAuthentication) {
+      navigate('/trang-chu');
+    }
+  }, []);
 
   const handleLogout = async () => {
     setAnchorElUser(null);
     dispatch(logout());
-    setLogout(true);
+    navigate('/dang-nhap');
   };
   const userSetting = [
     {
@@ -40,9 +45,6 @@ const AvatarNav = () => {
       slug: '/nguoi-dung/doi-mat-khau',
     },
   ];
-  if (isLogout) {
-    return <Navigate to='/dang-nhap' />;
-  }
   return (
     <>
       <Box sx={{ flexGrow: 0 }}>

@@ -1,21 +1,21 @@
-import axiosClient from './axiosClient';
+import axios from 'axios';
 const baseApi = '/api/attendees';
 const attendeeApi = {
   enroll(id: number) {
     const url = baseApi;
-    return axiosClient.post(url, { programId: id });
+    return axios.post(url, { programId: id });
   },
   getAttendee(id: number) {
     const url = `${baseApi}/program/${id}`;
-    return axiosClient.get(url);
+    return axios.get(url);
   },
   checkIn(id: number) {
     const url = `${baseApi}/${id}/check-in`;
-    return axiosClient.patch(url);
+    return axios.patch(url);
   },
   deleteAttendee(id: number) {
     const url = `${baseApi}/${id}`;
-    return axiosClient.delete(url);
+    return axios.delete(url);
   },
 };
 

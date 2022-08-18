@@ -5,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import { Box } from '@mui/system';
 import { useAppSelector } from 'app/hooks';
 import { NavbarData } from 'app/navbar';
+import axios from 'axios';
 import React from 'react';
 import { TiTicket } from 'react-icons/ti';
 import AvatarNav from './Avatar';
@@ -12,12 +13,14 @@ import DrawerComponent from './DrawerComp';
 const marginLeft = '20px';
 
 const Navbar = () => {
-  const user = useAppSelector((state: any) => state.user.current);
+  const user = useAppSelector((state: any) => state.user);
   const navActive = useAppSelector((state: any) => state.navbar.active);
-  const isLoggedIn = user.id;
   const pages = NavbarData();
   const theme = useTheme();
   const isMatch = useMediaQuery(theme.breakpoints.down('md'));
+  axios.defaults.headers.common = {
+    Authorization: `Bearer ${user.token}`,
+  };
 
   return (
     <React.Fragment>
@@ -46,7 +49,7 @@ const Navbar = () => {
                   </Button>
                 ))}
               </Box>
-              {isLoggedIn ? (
+              {user.isAuthentication ? (
                 <Box sx={{ marginLeft: 'auto' }}>
                   <AvatarNav />
                 </Box>

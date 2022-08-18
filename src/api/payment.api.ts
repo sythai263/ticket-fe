@@ -1,9 +1,9 @@
-import axiosClient from './axiosClient';
+import axios from 'axios';
 const baseApi = '/api/payment';
 const attendeeApi = {
   getPaymentInvoice(id: number) {
     const url = `${baseApi}/invoice/${id}`;
-    return axiosClient.patch(url);
+    return axios.patch(url);
   },
 };
 

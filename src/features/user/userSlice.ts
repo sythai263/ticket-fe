@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import userAPI from 'api/user.api';
+import axios from 'axios';
 import StorageKeys from 'constants/storage-keys';
 import Account, { User, UserUpdate } from 'constants/types/user/userType';
 const initialState: User = {};
@@ -17,6 +18,7 @@ export const login = createAsyncThunk(
         avatar: data.avatar,
         role: data.role,
         id: data.id,
+        token: data.token,
       };
       localStorage.setItem(StorageKeys.user, JSON.stringify(user));
       return user;
@@ -40,6 +42,9 @@ export const googleLogin = createAsyncThunk(
         role: data.role,
         id: data.id,
         token: data.token,
+      };
+      axios.defaults.headers.common = {
+        Authorization: `Bearer ${token}`,
       };
       localStorage.setItem(StorageKeys.user, JSON.stringify(user));
       return user;
@@ -111,6 +116,9 @@ const userSlice = createSlice({
       state.token = '';
       localStorage.removeItem(StorageKeys.token);
       localStorage.removeItem(StorageKeys.user);
+      axios.defaults.headers.common = {
+        Authorization: '',
+      };
     },
   },
   extraReducers: builder => {
@@ -119,7 +127,10 @@ const userSlice = createSlice({
         state.info = payload;
       })
       .addCase(login.fulfilled, (state, { payload }) => {
-        state.token = payload.token ? String(payload.token) : '';
+        state.token = payload.token ? payload.token : '';
+        axios.defaults.headers.common = {
+          Authorization: `Bearer ${state.token}`,
+        };
         payload.token = undefined;
         state.current = payload;
         state.isAuthentication = true;
@@ -135,6 +146,9 @@ const userSlice = createSlice({
       })
       .addCase(googleLogin.fulfilled, (state, { payload }) => {
         state.token = payload.token ? String(payload.token) : '';
+        axios.defaults.headers.common = {
+          Authorization: `Bearer ${localStorage.getItem(state.token)}`,
+        };
         payload.token = undefined;
         state.current = payload;
         state.isAuthentication = true;

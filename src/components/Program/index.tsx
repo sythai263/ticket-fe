@@ -21,6 +21,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { ErrorType } from 'constants/types/notification/errorType';
 import { ProgramType } from 'constants/types/program/programType';
 import { showAlert } from 'features/notification/notiSlice';
+import { refreshList } from 'features/program/programSlice';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -47,7 +48,7 @@ const Program = (program: ProgramType) => {
   useEffect(() => {
     const id = Number(program.id);
     checkAttendee(id);
-  });
+  }, [program.id]);
 
   const handleClose = () => {
     setOpen(false);
@@ -60,6 +61,7 @@ const Program = (program: ProgramType) => {
         api
           .enroll(Number(program.id))
           .then((response: AxiosResponse) => {
+            dispatch(refreshList());
             dispatch(
               showAlert({
                 color: 'success',
@@ -74,7 +76,7 @@ const Program = (program: ProgramType) => {
               setOpen(true);
             } else {
               const mess = data.message;
-              dispatch(showAlert({ color: 'success', message: String(mess) }));
+              dispatch(showAlert({ color: 'error', message: String(mess) }));
             }
             setLoading(false);
           });

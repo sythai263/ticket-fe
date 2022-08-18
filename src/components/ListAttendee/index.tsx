@@ -49,10 +49,13 @@ function Row(props: { row: AttendeeType }) {
       .deleteAttendee(row.id)
       .then((response: AxiosResponse) => {
         setLoading(false);
+        setOpenDialog(false);
+
         dispatch(showAlert({ color: 'success', message: 'Xóa thành công !' }));
       })
       .catch((err: AxiosError) => {
         const data = err.response?.data as ErrorType;
+        setOpenDialog(false);
         setLoading(false);
         dispatch(showAlert({ color: 'error', message: data.message }));
       });

@@ -11,35 +11,40 @@ import {
   TextField,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import { useAppDispatch } from 'app/hooks';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
 import {
   hideLoading,
   showAlert,
   showLoading,
 } from 'features/notification/notiSlice';
 import { login } from 'features/user/userSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ErrorType } from '../../constants/types/notification/errorType';
 
 const LoginComponent = () => {
   const google = `${process.env.REACT_APP_API_URL}api/google/auth`;
-  const token = localStorage.getItem('token');
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [authenticate, setAuthenticate] = useState(token ? true : false);
+  const userLogin = useAppSelector(state => state.user);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (userLogin.isAuthentication) {
+      navigate('/trang-chu');
+    }
+  }, [userLogin]);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
-  const [user, setUser] = useState({
+  const [account, setAccount] = useState({
     username: '',
     password: '',
   });
 
   const inputHandle = (e: any) => {
-    setUser(() => ({
-      ...user,
+    setAccount(() => ({
+      ...account,
       [e.target.name]: e.target.value,
     }));
   };
@@ -47,25 +52,21 @@ const LoginComponent = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     dispatch(showLoading());
-    const result = await dispatch(login(user));
+    const result = await dispatch(login(account));
     if (result.meta.requestStatus === 'rejected') {
       const err = result.payload as ErrorType;
       const mess = String(err.message);
-      setAuthenticate(false);
       dispatch(hideLoading());
       dispatch(showAlert({ color: 'error', message: mess }));
     } else {
-      setAuthenticate(true);
       dispatch(hideLoading());
       dispatch(
         showAlert({ color: 'success', message: 'Đăng nhập thành công!' })
       );
+      navigate('/trang-chu');
     }
   };
 
-  if (authenticate) {
-    return <Navigate to='/trang-chu' />;
-  }
   return (
     <Card sx={{ minWidth: 275, marginTop: '60px', padding: '30px' }}>
       <CardHeader
