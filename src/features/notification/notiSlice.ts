@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-
 const notiReducer = createSlice({
   name: 'noti',
   initialState: {
     alert: false,
     loading: false,
+    data: { color: 'success', message: '' },
   },
   reducers: {
-    showAlert(state) {
+    showAlert(state, { payload }) {
+      state.data = payload;
       state.alert = true;
     },
     hideAlert(state) {

@@ -12,9 +12,6 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAppDispatch } from 'app/hooks';
-import DialogComponent from 'components/DialogComponent';
-import SnackComponent from 'components/SnackComponent';
-import { SnackType } from 'constants/types/notification/snackType';
 import {
   hideLoading,
   showAlert,
@@ -31,7 +28,6 @@ const LoginComponent = () => {
   const token = localStorage.getItem('token');
   const dispatch = useAppDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
   const [authenticate, setAuthenticate] = useState(token ? true : false);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -56,14 +52,14 @@ const LoginComponent = () => {
       const err = result.payload as ErrorType;
       const mess = String(err.message);
       setAuthenticate(false);
-      setNoti({ color: 'error', message: mess });
       dispatch(hideLoading());
-      dispatch(showAlert());
+      dispatch(showAlert({ color: 'error', message: mess }));
     } else {
       setAuthenticate(true);
-      setNoti({ color: 'success', message: 'Đăng nhập thành công!' });
       dispatch(hideLoading());
-      dispatch(showAlert());
+      dispatch(
+        showAlert({ color: 'success', message: 'Đăng nhập thành công!' })
+      );
     }
   };
 
@@ -139,8 +135,6 @@ const LoginComponent = () => {
           </CardActions>
         </Box>
       </CardContent>
-      <SnackComponent {...noti} />
-      <DialogComponent />
     </Card>
   );
 };

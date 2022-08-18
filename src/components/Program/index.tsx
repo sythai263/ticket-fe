@@ -18,9 +18,7 @@ import { Box } from '@mui/system';
 import api from 'api/attendee.api';
 import { useAppDispatch } from 'app/hooks';
 import { AxiosError, AxiosResponse } from 'axios';
-import SnackComponent from 'components/SnackComponent';
 import { ErrorType } from 'constants/types/notification/errorType';
-import { SnackType } from 'constants/types/notification/snackType';
 import { ProgramType } from 'constants/types/program/programType';
 import { showAlert } from 'features/notification/notiSlice';
 import moment from 'moment';
@@ -32,7 +30,6 @@ const Program = (program: ProgramType) => {
   const [success, setSuccess] = useState(false);
   const [open, setOpen] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -63,8 +60,13 @@ const Program = (program: ProgramType) => {
         api
           .enroll(Number(program.id))
           .then((response: AxiosResponse) => {
-            setNoti({ color: 'success', message: 'Đã đăng ký thành công !' });
-            dispatch(showAlert());
+            dispatch(
+              showAlert({
+                color: 'success',
+                message: 'Đã đăng ký thành công !',
+              })
+            );
+            setLoading(false);
           })
           .catch((err: AxiosError) => {
             const data = err.response?.data as ErrorType;
@@ -72,9 +74,9 @@ const Program = (program: ProgramType) => {
               setOpen(true);
             } else {
               const mess = data.message;
-              setNoti({ color: 'success', message: String(mess) });
-              dispatch(showAlert());
+              dispatch(showAlert({ color: 'success', message: String(mess) }));
             }
+            setLoading(false);
           });
       }
     }
@@ -153,7 +155,6 @@ const Program = (program: ProgramType) => {
           </Box>
         </Box>
       </CardActions>
-      <SnackComponent {...noti} />
       <Dialog
         open={open}
         onClose={handleClose}

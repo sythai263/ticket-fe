@@ -17,11 +17,8 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import api from 'api/program.api';
 import { useAppDispatch } from 'app/hooks';
 import { AxiosError, AxiosResponse } from 'axios';
-import DialogComponent from 'components/DialogComponent';
-import SnackComponent from 'components/SnackComponent';
 import { IdType } from 'constants/types/idType';
 import { ErrorType } from 'constants/types/notification/errorType';
-import { SnackType } from 'constants/types/notification/snackType';
 import { ProgramType } from 'constants/types/program/programType';
 import { UpdateProgram } from 'constants/types/program/updateProgram';
 import {
@@ -42,7 +39,6 @@ const FormUpdateProgram = (id: IdType) => {
   });
   const [checked, setChecked] = useState(false);
   const [reset, setReset] = useState(false);
-  const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -81,19 +77,19 @@ const FormUpdateProgram = (id: IdType) => {
     api
       .updateProgram(info)
       .then((response: AxiosResponse) => {
-        setNoti({
-          color: 'success',
-          message: 'Cập nhật thông tin thành công!',
-        });
         dispatch(hideLoading());
-        dispatch(showAlert());
+        dispatch(
+          showAlert({
+            color: 'success',
+            message: 'Cập nhật thông tin thành công!',
+          })
+        );
       })
       .catch((error: AxiosError) => {
         const err = error.response?.data as ErrorType;
         const mess = String(err.message);
-        setNoti({ color: 'error', message: mess });
         dispatch(hideLoading());
-        dispatch(showAlert());
+        dispatch(showAlert({ color: 'error', message: mess }));
       });
   };
 
@@ -102,14 +98,15 @@ const FormUpdateProgram = (id: IdType) => {
     api
       .changeStatus(id.id)
       .then((response: AxiosResponse) => {
-        setNoti({
-          color: 'success',
-          message: 'Đã thay đổi trạng thái check in !',
-        });
         const data = response.data as ProgramType;
         setProgram(data);
         setChecked(Boolean(program.allowCheckIn));
-        dispatch(showAlert());
+        dispatch(
+          showAlert({
+            color: 'success',
+            message: 'Đã thay đổi trạng thái check in !',
+          })
+        );
         dispatch(hideLoading());
       })
       .catch((err: AxiosError) => {
@@ -117,8 +114,7 @@ const FormUpdateProgram = (id: IdType) => {
         const data = err.response?.data as ErrorType;
         const mess = data.message;
         setChecked(Boolean(program.allowCheckIn));
-        setNoti({ color: 'error', message: String(mess) });
-        dispatch(showAlert());
+        dispatch(showAlert({ color: 'error', message: String(mess) }));
         dispatch(hideLoading());
       });
   };
@@ -281,8 +277,6 @@ const FormUpdateProgram = (id: IdType) => {
             </CardActions>
           </Box>
         </CardContent>
-        <SnackComponent {...noti} />
-        <DialogComponent />
       </Card>
     </>
   );

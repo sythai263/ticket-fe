@@ -8,9 +8,6 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAppDispatch } from 'app/hooks';
-import DialogComponent from 'components/DialogComponent';
-import SnackComponent from 'components/SnackComponent';
-import { SnackType } from 'constants/types/notification/snackType';
 import {
   hideLoading,
   showAlert,
@@ -25,7 +22,6 @@ const AdminQRCodeComponent = () => {
   const [data, setData] = useState('No result');
   const [open, setOpen] = useState(false);
   const [attendeeID, setAttendeeID] = useState(-1);
-  const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
 
   const handleClose = () => {
     setOpen(false);
@@ -36,21 +32,23 @@ const AdminQRCodeComponent = () => {
     api
       .checkIn(Number(attendeeID))
       .then(() => {
-        setNoti({
-          color: 'success',
-          message: 'Đã check-in thành công, mời bạn tham dự !',
-        });
         dispatch(hideLoading());
-        dispatch(showAlert());
+        dispatch(
+          showAlert({
+            color: 'success',
+            message: 'Đã check-in thành công, mời bạn tham dự !',
+          })
+        );
         setOpen(false);
       })
       .catch((error: any) => {
-        setNoti({
-          color: 'error',
-          message: String(error.response.data.message),
-        });
         dispatch(hideLoading());
-        dispatch(showAlert());
+        dispatch(
+          showAlert({
+            color: 'error',
+            message: String(error.response.data.message),
+          })
+        );
         setOpen(false);
       });
   }
@@ -60,8 +58,9 @@ const AdminQRCodeComponent = () => {
       const prog = JSON.parse(data);
       const id = Number(prog.attendee);
       if (isNaN(id)) {
-        setNoti({ color: 'error', message: 'Mã QR không hợp lệ !' });
-        dispatch(showAlert());
+        dispatch(
+          showAlert({ color: 'error', message: 'Mã QR không hợp lệ !' })
+        );
       } else {
         setAttendeeID(id);
         setData(prog.name);
@@ -100,8 +99,6 @@ const AdminQRCodeComponent = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        <SnackComponent {...noti} />
-        <DialogComponent />
       </Box>
     </>
   );

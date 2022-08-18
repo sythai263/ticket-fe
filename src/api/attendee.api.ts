@@ -13,6 +13,10 @@ const attendeeApi = {
     const url = `${baseApi}/${id}/check-in`;
     return axiosClient.patch(url);
   },
+  deleteAttendee(id: number) {
+    const url = `${baseApi}/${id}`;
+    return axiosClient.delete(url);
+  },
 };
 
 export default attendeeApi;

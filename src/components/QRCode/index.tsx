@@ -8,9 +8,6 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAppDispatch } from 'app/hooks';
-import DialogComponent from 'components/DialogComponent';
-import SnackComponent from 'components/SnackComponent';
-import { SnackType } from 'constants/types/notification/snackType';
 import {
   hideLoading,
   showAlert,
@@ -25,7 +22,6 @@ const QRCodeComponent = () => {
   const [data, setData] = useState('No result');
   const [open, setOpen] = useState(false);
   const [program, setProgram] = useState();
-  const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
 
   const handleClose = () => {
     setOpen(false);
@@ -35,16 +31,18 @@ const QRCodeComponent = () => {
     dispatch(showLoading());
     try {
       await api.enroll(Number(program));
-      setNoti({ color: 'success', message: 'Đã đăng ký thành công !' });
       dispatch(hideLoading());
-      dispatch(showAlert());
+      dispatch(
+        showAlert({ color: 'success', message: 'Đã đăng ký thành công !' })
+      );
     } catch (error: any) {
-      setNoti({
-        color: 'error',
-        message: String(error.response.data.message),
-      });
       dispatch(hideLoading());
-      dispatch(showAlert());
+      dispatch(
+        showAlert({
+          color: 'error',
+          message: String(error.response.data.message),
+        })
+      );
     }
   }
 
@@ -87,8 +85,6 @@ const QRCodeComponent = () => {
             </Button>
           </DialogActions>
         </Dialog>
-        <SnackComponent {...noti} />
-        <DialogComponent />
       </Box>
     </>
   );

@@ -3,8 +3,15 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import {
   Box,
   Button,
+  CircularProgress,
   Collapse,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
   IconButton,
   Paper,
   Table,
@@ -19,15 +26,37 @@ import React, { useEffect, useState } from 'react';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import attendeeApi from 'api/attendee.api';
 import api from 'api/user.api';
-import { AxiosResponse } from 'axios';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { AxiosError, AxiosResponse } from 'axios';
 import { AttendeeType } from 'constants/types/attendee/attendeeType';
+import { ErrorType } from 'constants/types/notification/errorType';
+import { showAlert } from 'features/notification/notiSlice';
 import moment from 'moment';
+import { AiOutlineDelete } from 'react-icons/ai';
 const baseURL = process.env.REACT_APP_API_URL;
 
 function Row(props: { row: AttendeeType }) {
   const { row } = props;
   const [open, setOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const handleDelete = () => {
+    setLoading(true);
+    attendeeApi
+      .deleteAttendee(row.id)
+      .then((response: AxiosResponse) => {
+        setLoading(false);
+        dispatch(showAlert({ color: 'success', message: 'Xóa thành công !' }));
+      })
+      .catch((err: AxiosError) => {
+        const data = err.response?.data as ErrorType;
+        setLoading(false);
+        dispatch(showAlert({ color: 'error', message: data.message }));
+      });
+  };
 
   return (
     <React.Fragment>
@@ -54,7 +83,9 @@ function Row(props: { row: AttendeeType }) {
             <CheckCircleIcon color='success' />
           ) : (
             <a href={`${baseURL}api/payment/invoice/${row.invoice.id}`}>
-              <Button variant='contained'>Thanh toán</Button>
+              <Button variant='contained' size='small'>
+                Thanh toán
+              </Button>
             </a>
           )}
         </TableCell>
@@ -67,6 +98,31 @@ function Row(props: { row: AttendeeType }) {
         </TableCell>
         <TableCell align='right'>
           <img src={row.imageQR} alt='QRCode' style={{ height: '100px' }} />
+        </TableCell>
+        <TableCell align='center'>
+          <Grid container direction='column' spacing={2}>
+            <Grid item>
+              <Button
+                size='small'
+                variant='contained'
+                color='error'
+                onClick={() => setOpenDialog(true)}>
+                <AiOutlineDelete size={18} />
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      marginTop: '-12px',
+                      marginLeft: '-12px',
+                    }}
+                  />
+                )}
+              </Button>
+            </Grid>
+          </Grid>
         </TableCell>
       </TableRow>
       <TableRow>
@@ -182,17 +238,38 @@ function Row(props: { row: AttendeeType }) {
           </Collapse>
         </TableCell>
       </TableRow>
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'>
+        <DialogTitle id='alert-dialog-title'>
+          {'Bạn chắc chắn muốn xóa ???'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Cân nhắc trước khi xóa nha !!!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>Hủy</Button>
+          <Button onClick={handleDelete} autoFocus>
+            Chắc chắn
+          </Button>
+        </DialogActions>
+      </Dialog>
     </React.Fragment>
   );
 }
 const ListAttendeeComponent = () => {
   const [data, setData] = useState<AttendeeType[]>([]);
+  const refresh = useAppSelector(state => state.program.refresh);
   useEffect(() => {
     api.getAttendee().then((response: AxiosResponse) => {
       const payload = response.data as AttendeeType[];
       setData(payload);
     });
-  }, []);
+  }, [refresh]);
   return (
     <Container>
       <TableContainer component={Paper}>
@@ -205,6 +282,7 @@ const ListAttendeeComponent = () => {
               <TableCell align='center'>Thanh toán</TableCell>
               <TableCell align='center'>Check in</TableCell>
               <TableCell align='center'>Mã QR</TableCell>
+              <TableCell align='center'>Hành động</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

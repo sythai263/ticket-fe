@@ -4,7 +4,9 @@ import { LinkProps } from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import DialogComponent from 'components/DialogComponent';
 import Navbar from 'components/Navbar';
+import SnackComponent from 'components/SnackComponent';
 import vi from 'date-fns/locale/vi';
 import React from 'react';
 import {
@@ -64,6 +66,8 @@ const App: React.FC = () => (
           <Navbar />
           <Grid container justifyContent='center' marginTop={2}>
             <MainRoutes />
+            <SnackComponent />
+            <DialogComponent />
           </Grid>
         </BrowserRouter>
       </LocalizationProvider>

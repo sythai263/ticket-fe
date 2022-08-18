@@ -17,10 +17,7 @@ import Select from '@mui/material/Select';
 import { DatePicker } from '@mui/x-date-pickers';
 import userApi from 'api/user.api';
 import { useAppDispatch } from 'app/hooks';
-import DialogComponent from 'components/DialogComponent';
-import SnackComponent from 'components/SnackComponent';
 import { ErrorType } from 'constants/types/notification/errorType';
-import { SnackType } from 'constants/types/notification/snackType';
 import { User, UserUpdate } from 'constants/types/user/userType';
 import {
   hideLoading,
@@ -43,7 +40,7 @@ const UserInfoComponent = () => {
     gender: 'Male',
     username: '',
   });
-  const [noti, setNoti] = useState<SnackType>({ color: 'error', message: '' });
+
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
@@ -76,16 +73,16 @@ const UserInfoComponent = () => {
       if (response.meta.requestStatus === 'rejected') {
         const err = response.payload as ErrorType;
         const mess = String(err.message);
-        setNoti({ color: 'error', message: mess });
         dispatch(hideLoading());
-        dispatch(showAlert());
+        dispatch(showAlert({ color: 'error', message: mess }));
       } else {
-        setNoti({
-          color: 'success',
-          message: 'Cập nhật thông tin thành công!',
-        });
         dispatch(hideLoading());
-        dispatch(showAlert());
+        dispatch(
+          showAlert({
+            color: 'success',
+            message: 'Cập nhật thông tin thành công!',
+          })
+        );
       }
     }
   };
@@ -247,8 +244,6 @@ const UserInfoComponent = () => {
             </CardActions>
           </Box>
         </CardContent>
-        <SnackComponent {...noti} />
-        <DialogComponent />
       </Card>
     </>
   );
