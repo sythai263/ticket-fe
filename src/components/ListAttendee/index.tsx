@@ -33,6 +33,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { AttendeeType } from 'constants/types/attendee/attendeeType';
 import { ErrorType } from 'constants/types/notification/errorType';
 import { showAlert } from 'features/notification/notiSlice';
+import { refreshList } from 'features/program/programSlice';
 import moment from 'moment';
 import { AiOutlineDelete } from 'react-icons/ai';
 const baseURL = process.env.REACT_APP_API_URL;
@@ -47,11 +48,11 @@ function Row(props: { row: AttendeeType }) {
     setLoading(true);
     attendeeApi
       .deleteAttendee(row.id)
-      .then((response: AxiosResponse) => {
+      .then(() => {
         setLoading(false);
         setOpenDialog(false);
-
         dispatch(showAlert({ color: 'success', message: 'Xóa thành công !' }));
+        dispatch(refreshList());
       })
       .catch((err: AxiosError) => {
         const data = err.response?.data as ErrorType;

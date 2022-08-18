@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../../features/user/userSlice';
 
@@ -24,11 +24,6 @@ const AvatarNav = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  useEffect(() => {
-    if (user.isAuthentication) {
-      navigate('/trang-chu');
-    }
-  }, []);
 
   const handleLogout = async () => {
     setAnchorElUser(null);

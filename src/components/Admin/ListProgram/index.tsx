@@ -1,4 +1,13 @@
-import { Button, Grid, Link } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Link,
+} from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,11 +17,18 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import api from 'api/program.api';
-import { useAppSelector } from 'app/hooks';
-import { AxiosResponse } from 'axios';
+import { useAppDispatch, useAppSelector } from 'app/hooks';
+import { AxiosError, AxiosResponse } from 'axios';
 import Meta from 'constants/types/Meta';
+import { ErrorType } from 'constants/types/notification/errorType';
 import { ProgramType } from 'constants/types/program/programType';
 import QueryType from 'constants/types/queryType';
+import {
+  hideLoading,
+  showAlert,
+  showLoading,
+} from 'features/notification/notiSlice';
+import { refreshList } from 'features/program/programSlice';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { AiOutlineDelete } from 'react-icons/ai';
@@ -80,6 +96,8 @@ const columns: readonly Column[] = [
 export default function ListProgram() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [select, setSelect] = useState(-1);
+  const [openDialog, setOpenDialog] = useState(false);
   const refresh = useAppSelector((state: any) => state.program.refresh);
   const [list, setList] = useState<GetList>({
     data: [],
@@ -92,6 +110,7 @@ export default function ListProgram() {
       take: 10,
     },
   });
+  const dispatch = useAppDispatch();
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -115,6 +134,24 @@ export default function ListProgram() {
       setList(list);
     });
   }, [page, rowsPerPage, refresh]);
+
+  const handleDelete = () => {
+    dispatch(showLoading());
+    api
+      .deleteProgram(select)
+      .then(() => {
+        dispatch(hideLoading());
+        setOpenDialog(false);
+        dispatch(showAlert({ color: 'success', message: 'Xóa thành công !' }));
+        dispatch(refreshList());
+      })
+      .catch((error: AxiosError) => {
+        const data = error.response?.data as ErrorType;
+        dispatch(hideLoading());
+        setOpenDialog(false);
+        dispatch(showAlert({ color: 'error', message: data.message }));
+      });
+  };
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -180,7 +217,12 @@ export default function ListProgram() {
                           <Button
                             size='small'
                             variant='contained'
-                            color='error'>
+                            color='error'
+                            onClick={(e: any) => {
+                              e.preventDefault();
+                              setSelect(row.id ? row.id : -1);
+                              setOpenDialog(true);
+                            }}>
                             <AiOutlineDelete size={18} />
                           </Button>
                         </Grid>
@@ -202,6 +244,32 @@ export default function ListProgram() {
         onRowsPerPageChange={handleChangeRowsPerPage}
         labelRowsPerPage='Số hàng / trang'
       />
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'>
+        <DialogTitle id='alert-dialog-title'>
+          {'Bạn chắc chắn muốn xóa ???'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Cân nhắc trước khi xóa nha !!!
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setSelect(-1);
+              setOpenDialog(false);
+            }}>
+            Hủy
+          </Button>
+          <Button onClick={handleDelete} autoFocus>
+            Chắc chắn
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 }

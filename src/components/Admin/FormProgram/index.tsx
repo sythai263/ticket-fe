@@ -28,6 +28,7 @@ import {
 } from 'features/notification/notiSlice';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const FormUpdateProgram = (id: IdType) => {
   const [program, setProgram] = useState<ProgramType>({
@@ -41,6 +42,7 @@ const FormUpdateProgram = (id: IdType) => {
   const [reset, setReset] = useState(false);
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   useEffect(() => {
@@ -264,7 +266,12 @@ const FormUpdateProgram = (id: IdType) => {
             <CardActions>
               <Grid container justifyContent='center' spacing={3}>
                 <Grid item>
-                  <Button variant='contained' onClick={() => setReset(!reset)}>
+                  <Button
+                    variant='contained'
+                    onClick={() => {
+                      setReset(!reset);
+                      navigate('/admin/su-kien');
+                    }}>
                     Hủy
                   </Button>
                 </Grid>

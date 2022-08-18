@@ -33,6 +33,10 @@ const programApi = {
     const url = `${baseURL}/${program.id}`;
     return axios.patch(url, program);
   },
+  deleteProgram(id: number) {
+    const url = `${baseURL}/${id}`;
+    return axios.delete(url);
+  },
 };
 
 export default programApi;

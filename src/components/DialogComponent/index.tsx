@@ -1,23 +1,14 @@
-import {
-  Box,
-  CircularProgress,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-} from '@mui/material';
+import { Backdrop, CircularProgress } from '@mui/material';
 import { useAppSelector } from 'app/hooks';
 
 const DialogComponent = () => {
   const noti = useAppSelector((state: any) => state.noti);
   return (
-    <Dialog open={noti.loading} fullWidth>
-      <DialogTitle />
-      <DialogContent>
-        <Box display='flex' justifyContent='center' alignItems='center'>
-          <CircularProgress />
-        </Box>
-      </DialogContent>
-    </Dialog>
+    <Backdrop
+      sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 1 }}
+      open={noti.loading}>
+      <CircularProgress />
+    </Backdrop>
   );
 };
 
