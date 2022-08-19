@@ -14,7 +14,7 @@ const DetailProgramPage = () => {
   const id = Number(params.id);
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(setActive(6));
+    dispatch(setActive(0));
     api.getDetail(id).then((response: AxiosResponse) => {
       const data = response.data as ProgramType;
       setProgram(data);

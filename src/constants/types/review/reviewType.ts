@@ -5,5 +5,6 @@ export interface Review {
   user?: UserShort;
   star?: number;
   comment?: string;
-  create?: Date;
+  createAt?: Date;
+  canUpdate?: boolean;
 }
