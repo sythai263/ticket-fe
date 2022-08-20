@@ -33,7 +33,7 @@ const LoginComponent = () => {
     if (userLogin.isAuthentication) {
       navigate('/trang-chu');
     }
-  }, [userLogin]);
+  }, [userLogin, navigate]);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);

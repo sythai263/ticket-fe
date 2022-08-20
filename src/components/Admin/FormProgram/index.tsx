@@ -17,7 +17,6 @@ import { DateTimePicker } from '@mui/x-date-pickers';
 import api from 'api/program.api';
 import { useAppDispatch } from 'app/hooks';
 import { AxiosError, AxiosResponse } from 'axios';
-import { IdType } from 'constants/types/idType';
 import { ErrorType } from 'constants/types/notification/errorType';
 import { ProgramType } from 'constants/types/program/programType';
 import { UpdateProgram } from 'constants/types/program/updateProgram';
@@ -30,7 +29,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const FormUpdateProgram = (id: IdType) => {
+const FormUpdateProgram = (props: { id: number }) => {
   const [program, setProgram] = useState<ProgramType>({
     description: '',
     name: '',
@@ -48,7 +47,7 @@ const FormUpdateProgram = (id: IdType) => {
   useEffect(() => {
     dispatch(showLoading());
     api
-      .getDetail(id.id)
+      .getDetail(props.id)
       .then((response: AxiosResponse) => {
         const data = response.data as ProgramType;
         setProgram(data);
@@ -58,14 +57,14 @@ const FormUpdateProgram = (id: IdType) => {
       .catch(err => {
         dispatch(hideLoading());
       });
-  }, [id.id, reset, dispatch, program.allowCheckIn]);
+  }, [props.id, reset, dispatch, program.allowCheckIn]);
 
   const handleUpdate = async (e: any) => {
     e.preventDefault();
     dispatch(showLoading());
 
     const info = {
-      id: id.id,
+      id: props.id,
       description: program.description,
       endDate: program.endDate,
       name: program.name,
@@ -98,7 +97,7 @@ const FormUpdateProgram = (id: IdType) => {
   const handleChangeStatus = () => {
     dispatch(showLoading());
     api
-      .changeStatus(id.id)
+      .changeStatus(props.id)
       .then((response: AxiosResponse) => {
         const data = response.data as ProgramType;
         setProgram(data);

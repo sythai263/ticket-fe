@@ -7,21 +7,17 @@ import {
   LinearProgress,
   Rating,
   Tab,
-  TablePagination,
   Tabs,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
 import { Box } from '@mui/system';
-import api from 'api/review.api';
+import api from 'api/program.api';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { AxiosError, AxiosResponse } from 'axios';
-import ReviewCard from 'components/ReviewCard';
 import { ErrorType } from 'constants/types/notification/errorType';
 import { ProgramType } from 'constants/types/program/programType';
-import QueryType from 'constants/types/queryType';
-import { PaginationReview } from 'constants/types/review/paginationReview';
 import {
   hideLoading,
   showAlert,
@@ -30,6 +26,8 @@ import {
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import Carousel from 'react-material-ui-carousel';
+import FormReview from './FormReview';
+import ListReview from './ListReview';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -37,25 +35,28 @@ interface TabPanelProps {
   value: number;
 }
 
-const DetailProgramComponent = (program: ProgramType) => {
+const DetailProgramComponent = (props: { id: number }) => {
   const theme = useTheme();
+  const init = {
+    allowCheckIn: false,
+    id: -1,
+    avatar: '',
+    description: '',
+    endDate: new Date(),
+    startDate: new Date(),
+    starAvg: 5,
+    imageQR: '',
+    name: '',
+    place: '',
+    price: 0,
+    remain: 0,
+    total: 0,
+  } as ProgramType;
+  const [program, setProgram] = useState<ProgramType>(init);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const items = [program.avatar, program.imageQR];
   const [value, setValue] = useState(0);
   const refresh = useAppSelector(state => state.program.refresh);
-  const [reviews, setReviews] = useState<PaginationReview>({
-    meta: {
-      hasNextPage: false,
-      hasPreviousPage: false,
-      itemCount: 0,
-      page: 1,
-      pageCount: 0,
-      take: 10,
-    },
-    data: [],
-  });
 
   const dispatch = useAppDispatch();
   function TabPanel(props: TabPanelProps) {
@@ -83,38 +84,22 @@ const DetailProgramComponent = (program: ProgramType) => {
     setValue(newValue);
   };
 
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
   useEffect(() => {
     dispatch(showLoading());
-    const query = {
-      page: page + 1,
-      take: rowsPerPage,
-      order: 'DESC',
-    } as QueryType;
-    const id = program.id ? program.id : -1;
     api
-      .getReview(id, query)
+      .getDetail(props.id)
       .then((response: AxiosResponse) => {
-        const data = response.data as PaginationReview;
-        setReviews(data);
+        const data = response.data as ProgramType;
+        setProgram(data);
         dispatch(hideLoading());
       })
       .catch((error: AxiosError) => {
         const data = error.response?.data as ErrorType;
-        dispatch(hideLoading());
         dispatch(showAlert({ color: 'error', message: data.message }));
+        dispatch(hideLoading());
       });
-  }, [page, rowsPerPage, dispatch, refresh, program.id]);
+  }, [props.id, dispatch, refresh]);
+
   return (
     <Container>
       <Card>
@@ -157,7 +142,10 @@ const DetailProgramComponent = (program: ProgramType) => {
             </Typography>
             <CardContent>
               <Box sx={{ width: '100%' }}>
-                <LinearProgress variant='determinate' value={program.total} />
+                <LinearProgress
+                  variant='determinate'
+                  value={Number(program.remain) / Number(program.total)}
+                />
               </Box>
               <Typography
                 variant='body2'
@@ -193,30 +181,11 @@ const DetailProgramComponent = (program: ProgramType) => {
           </TabPanel>
           <TabPanel value={value} index={1}>
             <Grid container spacing={6} direction='column'>
-              {reviews.data.length > 0 ? (
-                reviews.data.map(review => (
-                  <Grid item key={review.id}>
-                    <ReviewCard {...review} />
-                  </Grid>
-                ))
-              ) : (
-                <Grid item>
-                  <Typography>
-                    Hãy là người đầu tiên đánh giá chương trình này!
-                  </Typography>
-                </Grid>
-              )}
               <Grid item>
-                <TablePagination
-                  rowsPerPageOptions={[10, 25, 100]}
-                  component='div'
-                  count={reviews.meta.pageCount}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  labelRowsPerPage='Số đánh giá / trang'
-                />
+                <FormReview id={program.id ? program.id : -1} />
+              </Grid>
+              <Grid item>
+                <ListReview id={program.id ? program.id : -1} />
               </Grid>
             </Grid>
           </TabPanel>

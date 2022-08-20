@@ -1,5 +1,6 @@
 import axios from 'axios';
 import QueryType from 'constants/types/queryType';
+import { CreateReview } from 'constants/types/review/createReview';
 import { UpdateReview } from 'constants/types/review/updateReview';
 import queryString from 'query-string';
 const baseApi = '/api/reviews/program';
@@ -13,6 +14,11 @@ const reviewApi = {
   updateReview(data: UpdateReview) {
     const url = `${baseApi}`;
     return axios.patch(url, data);
+  },
+
+  createReview(data: CreateReview) {
+    const url = `${baseApi}`;
+    return axios.post(url, data);
   },
 
   deleteReview(id: number) {
