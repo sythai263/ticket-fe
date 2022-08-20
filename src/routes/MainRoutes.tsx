@@ -1,5 +1,6 @@
 import PrivateRoutes from 'components/PrivateRoute';
 import CheckInPage from 'pages/Admin/CheckIn';
+import CreateProgramPage from 'pages/Admin/CreateProgram';
 import DashboardPage from 'pages/Admin/DashboardPage';
 import AttendeesPage from 'pages/Admin/ListAttendeePage';
 import ManageProgram from 'pages/Admin/ManageProgram';
@@ -28,7 +29,7 @@ const MainRoutes = () => {
           <Route path='su-kien/:id' element={<AttendeesPage />} />
           <Route path='su-kien/chinh-sua/:id' element={<UpdateProgram />} />
           <Route path='tong-quan' element={<DashboardPage />} />
-          <Route path='them-su-kien' element={<UserInfoPage />} />
+          <Route path='them-su-kien' element={<CreateProgramPage />} />
           <Route path='check-in' element={<CheckInPage />} />
         </Route>
         <Route path='/' element={<Navigate to='trang-chu' />} />
