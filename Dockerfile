@@ -5,7 +5,7 @@ FROM node:18
 WORKDIR /app
 
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
+COPY package*.json /app/
 
 # Install app dependencies
 RUN npm install --legacy-peer-deps
@@ -13,7 +13,9 @@ RUN npm install --legacy-peer-deps
 RUN npm install react-scripts@3.41 -g
 
 # Bundle app source
-COPY . ./
+COPY . /app/
+
+EXPOSE 8000
 
 # Creates a "dist" folder with the production build
 CMD [“npm”, “start”]
