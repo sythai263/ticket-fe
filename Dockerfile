@@ -1,14 +1,20 @@
-FROM node:18 AS development
-# Set working directory
-WORKDIR /app
-COPY package.json /app/package.json
-COPY package-lock.json /app/package-lock.json
-# Same as npm install
-RUN npm ci --legacy-peer-deps
-COPY . /app
-ENV CI=true
-ENV PORT=8000
-ENV REACT_APP_API_URL=https://api.musreview.org/
-FROM development AS build
+# Base image
+FROM node:18
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+COPY package*.json ./
+
+# Install app dependencies
+RUN npm install --legacy-peer-deps
+
+# Bundle app source
+COPY . .
+
+# Creates a "dist" folder with the production build
 RUN npm run build
+
+# Start the server using the production build
 CMD [ "npm", "start" ]
