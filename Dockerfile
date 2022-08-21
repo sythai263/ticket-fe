@@ -9,6 +9,6 @@ COPY . /app
 ENV CI=true
 ENV PORT=8000
 ENV REACT_APP_API_URL=https://api.musreview.org/
-CMD [ "npm", "start" ]
 FROM development AS build
 RUN npm run build
+CMD [ "npm", "start" ]
