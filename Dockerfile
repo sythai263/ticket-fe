@@ -1,21 +1,13 @@
-# Base image
-FROM node:18
-
-# Create app directory
-WORKDIR /usr/src/app
-
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
-
-# Install app dependencies
-RUN npm i --legacy-peer-deps
-
-# Bundle app source
-COPY . .
-
-# Creates a "dist" folder with the production build
+FROM node:lts AS development
+# Set working directory
+WORKDIR /app
+COPY package.json /app/package.json
+COPY package-lock.json /app/package-lock.json
+# Same as npm install
+RUN npm ci
+COPY . /app
+ENV CI=true
+ENV PORT=3000
+CMD [ "npm", "start" ]
+FROM development AS build
 RUN npm run build
-
-# Start the server using the production build
-
-CMD [ "yarn", "start" ]
