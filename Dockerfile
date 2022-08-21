@@ -17,5 +17,5 @@ COPY . /app/
 EXPOSE 8000
 
 # Creates a "dist" folder with the production build
-CMD [“npm”, “start”]
+RUN npm start
 
