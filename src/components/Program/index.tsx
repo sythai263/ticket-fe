@@ -8,6 +8,7 @@ import {
   DialogTitle,
   Grid,
   LinearProgress,
+  Link,
 } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -100,9 +101,11 @@ const Program = (program: ProgramType) => {
         alt={program.name}
       />
       <CardContent>
-        <Typography gutterBottom variant='h5' component='div'>
-          {program.name}
-        </Typography>
+        <Link color='inherit' underline='none' href={`/su-kien/${program.id}`}>
+          <Typography gutterBottom variant='h5' component='div'>
+            {program.name}
+          </Typography>
+        </Link>
         <Typography
           variant='body2'
           color='text.secondary'

@@ -110,6 +110,7 @@ const FormCreateProgram = () => {
             message: 'Tạo sự kiện thành công!',
           })
         );
+        navigate('/admin/su-kien');
       })
       .catch((error: AxiosError) => {
         const err = error.response?.data as ErrorType;

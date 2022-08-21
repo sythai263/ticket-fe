@@ -1,8 +1,16 @@
 import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
 import { Box } from '@mui/system';
+import { useEffect, useState } from 'react';
 import { BsAward } from 'react-icons/bs';
 
 const InfoCheckIn = (props: { attendees: number; checkIn: number }) => {
+  const [percent, setPercent] = useState(0);
+  useEffect(() => {
+    const p = props.checkIn / props.attendees;
+    if (!isNaN(p)) {
+      setPercent(Number((p * 100).toFixed(2)));
+    }
+  }, [props.attendees, props.checkIn]);
   return (
     <Card sx={{ width: '100%', height: '100%' }}>
       <CardContent>
@@ -47,7 +55,7 @@ const InfoCheckIn = (props: { attendees: number; checkIn: number }) => {
               <Typography color='textSecondary' variant='caption'>
                 {'Tỷ lệ '}
               </Typography>
-              {((props.checkIn / props.attendees) * 100).toFixed(2)} %
+              {percent} %
             </Typography>
           </Box>
         </Box>
