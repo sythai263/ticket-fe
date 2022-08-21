@@ -3,8 +3,6 @@ FROM node:18
 
 # Create app directory
 WORKDIR /app
-Add `/app/node_modules/.bin` to $PATH:
-ENV PATH /app/node_modules/.bin:$PATH
 
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 COPY package*.json ./
