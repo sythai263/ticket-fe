@@ -13,18 +13,19 @@ import {
   useTheme,
 } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { DatePicker } from '@mui/x-date-pickers';
 import userApi from 'api/user.api';
 import { useAppDispatch } from 'app/hooks';
+import { AxiosError, AxiosResponse } from 'axios';
 import { ErrorType } from 'constants/types/notification/errorType';
-import { User, UserUpdate } from 'constants/types/user/userType';
+import { User, UserShort, UserUpdate } from 'constants/types/user/userType';
 import {
   hideLoading,
   showAlert,
   showLoading,
 } from 'features/notification/notiSlice';
-import { updateUser } from 'features/user/userSlice';
+import { changeAvatar, updateUser } from 'features/user/userSlice';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 
@@ -40,6 +41,9 @@ const UserInfoComponent = () => {
     gender: 'Male',
     username: '',
   });
+  const [avatar, setAvatar] = useState('');
+  const [file, setFile] = useState();
+  const [isSelect, setSelect] = useState(false);
 
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -50,9 +54,10 @@ const UserInfoComponent = () => {
       const { data } = response;
       const usr = { ...data };
       setUser(usr);
+      setAvatar(user.avatar ? user.avatar : '');
       dispatch(hideLoading());
     });
-  }, [dispatch]);
+  }, [dispatch, user.avatar]);
 
   const handleUpdate = async (e: any) => {
     e.preventDefault();
@@ -90,6 +95,7 @@ const UserInfoComponent = () => {
     userApi.getUser().then(response => {
       const usr = { ...response.data };
       setUser(usr);
+      setAvatar(user.avatar ? user.avatar : '');
       setAllowUpdate(true);
     });
   };
@@ -98,6 +104,45 @@ const UserInfoComponent = () => {
       ...user,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleSelect = (e: any) => {
+    setSelect(true);
+    setAvatar(URL.createObjectURL(e.target.files[0]));
+    setFile(e.target.files[0]);
+  };
+  const handleCancel = () => {
+    setSelect(false);
+    setAvatar(user.avatar ? user.avatar : '');
+  };
+
+  const handleUpload = () => {
+    dispatch(showLoading());
+    if (!file) {
+      dispatch(hideLoading());
+      dispatch(showAlert({ color: 'error', message: 'Vui lòng chọn ảnh !' }));
+    } else {
+      userApi
+        .changeAvatar(file)
+        .then((response: AxiosResponse) => {
+          const info = response.data as UserShort;
+          setAvatar(info.avatar ? info.avatar : '');
+          setSelect(false);
+          dispatch(changeAvatar(info.avatar));
+          dispatch(hideLoading());
+          dispatch(
+            showAlert({
+              color: 'success',
+              message: 'Đã thay đổi ảnh đại diện thành công !',
+            })
+          );
+        })
+        .catch((err: AxiosError) => {
+          const data = err.response?.data as ErrorType;
+          dispatch(hideLoading());
+          dispatch(showAlert({ color: 'error', message: data.message }));
+        });
+    }
   };
 
   return (
@@ -113,14 +158,42 @@ const UserInfoComponent = () => {
             autoComplete='off'>
             <Box
               display='flex'
+              flexDirection='column'
               justifyContent='center'
               alignItems='center'
               marginBottom={5}>
               <Avatar
-                src={user.avatar}
-                alt={user.firstName}
-                sx={{ width: '200px', height: '200px' }}
+                src={avatar}
+                alt={avatar}
+                sx={{ width: '200px', height: '200px', marginBottom: '20px' }}
               />
+              <Grid container spacing={3} justifyContent='center'>
+                {isSelect ? (
+                  <>
+                    <Grid item>
+                      <Button variant='contained' onClick={handleUpload}>
+                        Tải lên
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button onClick={handleCancel}>Hủy</Button>
+                    </Grid>
+                  </>
+                ) : (
+                  <Grid item>
+                    <Button variant='contained' component='label'>
+                      Chọn ảnh
+                      <input
+                        type='file'
+                        hidden
+                        onChange={handleSelect}
+                        name='avatar'
+                        accept='image/*'
+                      />
+                    </Button>
+                  </Grid>
+                )}
+              </Grid>
             </Box>
             <Grid container display='flex'>
               <TextField
@@ -221,7 +294,12 @@ const UserInfoComponent = () => {
                     label='Giới tính'
                     sx={{ m: 1 }}
                     disabled={allowUpdate}
-                    onChange={inputHandle}>
+                    onChange={(event: SelectChangeEvent) => {
+                      setUser({
+                        ...user,
+                        gender: event.target.value,
+                      });
+                    }}>
                     <MenuItem value='Male'>Nam</MenuItem>
                     <MenuItem value='Female'>Nữ</MenuItem>
                   </Select>

@@ -125,12 +125,24 @@ const LoginComponent = () => {
                   Đăng nhập
                 </Button>
               </Grid>
-              <Grid container>
+              <Grid container mb={3}>
                 <a href={google} style={{ width: '100%' }}>
                   <Button fullWidth variant='outlined' endIcon={<FcGoogle />}>
                     Đăng nhập với
                   </Button>
                 </a>
+              </Grid>
+              <Grid container spacing={1} display='flex' flexDirection='column'>
+                <Grid item>
+                  <Button href='/quen-mat-khau' fullWidth color='info'>
+                    Quên mật khẩu rồi ! Tìm lại ???
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button href='/dang-ky' fullWidth color='info'>
+                    Chưa có tài khoản! Đăng ký ngay???
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
           </CardActions>

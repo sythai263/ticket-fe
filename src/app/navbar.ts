@@ -27,11 +27,6 @@ export const NavbarData = (): NavType[] => {
   if (role === RoleType.ADMIN) {
     pages.push(
       {
-        id: 4,
-        display: 'Tổng quan',
-        slug: 'admin/tong-quan',
-      },
-      {
         id: 5,
         display: 'QL Sự kiện',
         slug: 'admin/su-kien',

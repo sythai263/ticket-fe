@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import userAPI from 'api/user.api';
 import axios from 'axios';
 import StorageKeys from 'constants/storage-keys';
+import { CreateUser } from 'constants/types/user/createUser';
 import Account, { User, UserUpdate } from 'constants/types/user/userType';
 const initialState: User = {};
 
@@ -21,6 +22,26 @@ export const login = createAsyncThunk(
         token: data.token,
       };
       localStorage.setItem(StorageKeys.user, JSON.stringify(user));
+      return user;
+    } catch (error: any) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const signUp = createAsyncThunk(
+  'user/sign-up',
+  async (form: CreateUser, { rejectWithValue }) => {
+    try {
+      const response = await userAPI.createUser(form);
+      const { data } = response;
+      const user: User = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        avatar: data.avatar,
+        role: data.role,
+        id: data.id,
+      };
       return user;
     } catch (error: any) {
       return rejectWithValue(error.response.data);
@@ -120,6 +141,13 @@ const userSlice = createSlice({
         Authorization: '',
       };
     },
+    changeAvatar(state, { payload }) {
+      const init = state.current;
+      init.avatar = payload;
+      state.current = init;
+      localStorage.removeItem(StorageKeys.user);
+      localStorage.setItem(StorageKeys.user, JSON.stringify(init));
+    },
   },
   extraReducers: builder => {
     builder
@@ -152,10 +180,20 @@ const userSlice = createSlice({
         payload.token = undefined;
         state.current = payload;
         state.isAuthentication = true;
+      })
+      .addCase(signUp.fulfilled, (state, { payload }) => {
+        state.current = initialState;
+        state.token = '';
+        state.isAuthentication = false;
+      })
+      .addCase(signUp.rejected, (state, error) => {
+        state.current = initialState;
+        state.token = '';
+        state.isAuthentication = false;
       });
   },
 });
 
 const { actions, reducer } = userSlice;
-export const { logout } = actions;
+export const { logout, changeAvatar } = actions;
 export default reducer;

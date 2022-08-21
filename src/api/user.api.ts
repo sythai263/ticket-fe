@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { CreateUser } from 'constants/types/user/createUser';
+import { PasswordType } from 'constants/types/user/passwordType';
+import { ResetPassword } from 'constants/types/user/ResetPassword';
 import Account, { UserUpdate } from 'constants/types/user/userType';
 
 const userApi = {
@@ -34,6 +37,24 @@ const userApi = {
   getAttendee() {
     const url = `api/user/attendees`;
     return axios.get(url);
+  },
+  createUser(user: CreateUser) {
+    const url = 'api/user';
+    return axios.post(url, user);
+  },
+  changeAvatar(file: any) {
+    const data = new FormData();
+    data.append('avatar', file);
+    const url = `api/user/avatar`;
+    return axios.post(url, data);
+  },
+  changePassword(info: PasswordType) {
+    const url = `api/user/password`;
+    return axios.patch(url, info);
+  },
+  resetPassword(info: ResetPassword) {
+    const url = `api/user/password`;
+    return axios.post(url, info);
   },
 };
 
