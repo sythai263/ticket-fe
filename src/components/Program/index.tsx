@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Grid,
   LinearProgress,
 } from '@mui/material';
 import Button from '@mui/material/Button';
@@ -85,7 +86,13 @@ const Program = (program: ProgramType) => {
   };
 
   return (
-    <Card sx={{ maxWidth: 345, height: '100%' }}>
+    <Card
+      sx={{
+        maxWidth: 345,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
       <CardMedia
         component='img'
         height='140'
@@ -106,56 +113,69 @@ const Program = (program: ProgramType) => {
           {program.description}
         </Typography>
       </CardContent>
-      <CardContent>
-        <Box sx={{ width: '100%' }}>
-          <LinearProgress variant='determinate' value={progress} />
-        </Box>
-        <Typography variant='body2' color='text.secondary' textAlign='right'>
-          {`Còn lại: ${program.remain}/${program.total}`}
-        </Typography>
-        <Typography variant='body2' color='text.secondary'>
-          {`Bắt đầu: ${moment(program.startDate).format('HH:mm DD/MM/YYYY')} `}
-        </Typography>
-        <Typography variant='body2' color='text.secondary'>
-          {`Kết thúc: ${moment(program.endDate).format('HH:mm DD/MM/YYYY')} `}
-        </Typography>
-      </CardContent>
-      <CardContent>
-        <Typography variant='h5' color='text.secondary' textAlign='left'>
-          {`Phí: ${Number(program.price).toLocaleString('vi', {
-            style: 'currency',
-            currency: 'VND',
-          })}`}
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size='small' href={`/su-kien/${program.id}`}>
-          Xem chi tiết
-        </Button>
-
-        <Box display='flex'>
-          <Box sx={{ m: 1, position: 'relative' }}>
-            <Button
-              variant='contained'
-              disabled={loading}
-              color={success ? 'success' : 'primary'}
-              onClick={handleButtonClick}>
-              {success ? <CheckIcon /> : 'Tham gia'}
+      <CardActions sx={{ marginTop: 'auto' }}>
+        <Grid container flexDirection='column'>
+          <Grid item>
+            <CardContent>
+              <Box sx={{ width: '100%' }}>
+                <LinearProgress variant='determinate' value={progress} />
+              </Box>
+              <Typography
+                variant='body2'
+                color='text.secondary'
+                textAlign='right'>
+                {`Còn lại: ${program.remain}/${program.total}`}
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                {`Bắt đầu: ${moment(program.startDate).format(
+                  'HH:mm DD/MM/YYYY'
+                )} `}
+              </Typography>
+              <Typography variant='body2' color='text.secondary'>
+                {`Kết thúc: ${moment(program.endDate).format(
+                  'HH:mm DD/MM/YYYY'
+                )} `}
+              </Typography>
+            </CardContent>
+          </Grid>
+          <Grid item>
+            <Typography variant='h5' color='text.secondary' textAlign='left'>
+              {`Phí: ${Number(program.price).toLocaleString('vi', {
+                style: 'currency',
+                currency: 'VND',
+              })}`}
+            </Typography>
+          </Grid>
+          <Grid item display='flex' flexDirection='row'>
+            <Button size='small' href={`/su-kien/${program.id}`}>
+              Xem chi tiết
             </Button>
-            {loading && (
-              <CircularProgress
-                size={24}
-                sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  marginTop: '-12px',
-                  marginLeft: '-12px',
-                }}
-              />
-            )}
-          </Box>
-        </Box>
+
+            <Box display='flex'>
+              <Box sx={{ m: 1, position: 'relative' }}>
+                <Button
+                  variant='contained'
+                  disabled={loading}
+                  color={success ? 'success' : 'primary'}
+                  onClick={handleButtonClick}>
+                  {success ? <CheckIcon /> : 'Tham gia'}
+                </Button>
+                {loading && (
+                  <CircularProgress
+                    size={24}
+                    sx={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      marginTop: '-12px',
+                      marginLeft: '-12px',
+                    }}
+                  />
+                )}
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
       </CardActions>
       <Dialog
         open={open}

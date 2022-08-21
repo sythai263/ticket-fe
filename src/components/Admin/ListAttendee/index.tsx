@@ -26,6 +26,7 @@ import { IdType } from 'constants/types/idType';
 import Meta from 'constants/types/Meta';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import SaleProgramComponent from '../SaleProgram';
 
 interface GetList {
   data: AttendeeType[];
@@ -231,6 +232,7 @@ const ListAttendeeComponent = (d: IdType) => {
   }, [page, rowsPerPage, refresh, d.id]);
   return (
     <Container>
+      <SaleProgramComponent id={d.id} />
       <TableContainer component={Paper}>
         <Table aria-label='collapsible table'>
           <TableHead>

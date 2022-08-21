@@ -37,6 +37,10 @@ const programApi = {
     const url = `${baseURL}/${id}`;
     return axios.delete(url);
   },
+  getSales(id: number) {
+    const url = `${baseURL}/${id}/sales`;
+    return axios.get(url);
+  },
 };
 
 export default programApi;
