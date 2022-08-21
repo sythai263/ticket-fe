@@ -14,8 +14,6 @@ RUN npm install --legacy-peer-deps
 # Bundle app source
 COPY . /app/
 
-EXPOSE 8000
-
 # Creates a "dist" folder with the production build
-RUN npm start
+CMD [ "yarn", "start" ]
 
