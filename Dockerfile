@@ -10,7 +10,7 @@ COPY package*.json ./
 # Install app dependencies
 RUN npm install --legacy-peer-deps
 
-RUN npm install react-scripts@3.41 -g — silent
+RUN npm install react-scripts@3.41 -g
 
 # Bundle app source
 COPY . ./
