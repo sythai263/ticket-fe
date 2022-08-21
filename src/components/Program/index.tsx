@@ -37,7 +37,8 @@ const Program = (program: ProgramType) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const checkAttendee = (id: number) => {
+  useEffect(() => {
+    const id = Number(program.id);
     api.getAttendee(id).then((response: AxiosResponse) => {
       const { data } = response;
       if (data.isRegister) {
@@ -45,12 +46,7 @@ const Program = (program: ProgramType) => {
         setSuccess(true);
       }
     });
-  };
-
-  useEffect(() => {
-    const id = Number(program.id);
-    checkAttendee(id);
-  }, [program.id]);
+  }, [program.id, program.remain, program.total]);
 
   const handleClose = () => {
     setOpen(false);
