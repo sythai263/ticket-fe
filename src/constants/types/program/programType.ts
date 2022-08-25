@@ -15,4 +15,5 @@ export interface ProgramType {
   imageQR?: string;
   allowCheckIn?: boolean;
   reviews?: Review[];
+  isRegister?: boolean;
 }

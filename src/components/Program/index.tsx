@@ -25,28 +25,20 @@ import { ProgramType } from 'constants/types/program/programType';
 import { showAlert } from 'features/notification/notiSlice';
 import { refreshList } from 'features/program/programSlice';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Program = (program: ProgramType) => {
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState(
+    program.isRegister ? program.isRegister : false
+  );
   const [open, setOpen] = useState(false);
-  const [progress, setProgress] = useState(0);
-
+  const [progress, setProgress] = useState(
+    Number(program.remain) / Number(program.total)
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const id = Number(program.id);
-    api.getAttendee(id).then((response: AxiosResponse) => {
-      const { data } = response;
-      if (data.isRegister) {
-        setProgress(Number(program.remain) / Number(program.total));
-        setSuccess(true);
-      }
-    });
-  }, [program.id, program.remain, program.total]);
 
   const handleClose = () => {
     setOpen(false);
@@ -66,6 +58,8 @@ const Program = (program: ProgramType) => {
                 message: 'Đã đăng ký thành công !',
               })
             );
+            setSuccess(true);
+            setProgress(Number(program.remain) / Number(program.total));
             setLoading(false);
           })
           .catch((err: AxiosError) => {

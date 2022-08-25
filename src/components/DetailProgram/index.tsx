@@ -1,8 +1,17 @@
+import CheckIcon from '@mui/icons-material/Check';
 import {
+  Button,
   Card,
+  CardActions,
   CardContent,
   CardHeader,
+  CircularProgress,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Grid,
   LinearProgress,
   Rating,
@@ -13,6 +22,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { Box } from '@mui/system';
+import attendeeApi from 'api/attendee.api';
 import api from 'api/program.api';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -23,9 +33,11 @@ import {
   showAlert,
   showLoading,
 } from 'features/notification/notiSlice';
+import { refreshList } from 'features/program/programSlice';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import Carousel from 'react-material-ui-carousel';
+import { useNavigate } from 'react-router-dom';
 import FormReview from './FormReview';
 import ListReview from './ListReview';
 
@@ -57,6 +69,45 @@ const DetailProgramComponent = (props: { id: number }) => {
   const items = [program.avatar, program.imageQR];
   const [value, setValue] = useState(0);
   const refresh = useAppSelector(state => state.program.refresh);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleButtonClick = () => {
+    if (!loading) {
+      if (!success) {
+        setLoading(true);
+        attendeeApi
+          .enroll(Number(program.id))
+          .then((response: AxiosResponse) => {
+            dispatch(refreshList());
+            dispatch(
+              showAlert({
+                color: 'success',
+                message: 'Đã đăng ký thành công !',
+              })
+            );
+            setSuccess(true);
+            setLoading(false);
+          })
+          .catch((err: AxiosError) => {
+            const data = err.response?.data as ErrorType;
+            if (err.response?.status === 401) {
+              setOpen(true);
+            } else {
+              const mess = data.message;
+              dispatch(showAlert({ color: 'error', message: String(mess) }));
+            }
+            setLoading(false);
+          });
+      }
+    }
+  };
 
   const dispatch = useAppDispatch();
   function TabPanel(props: TabPanelProps) {
@@ -91,6 +142,7 @@ const DetailProgramComponent = (props: { id: number }) => {
       .then((response: AxiosResponse) => {
         const data = response.data as ProgramType;
         setProgram(data);
+        setSuccess(Boolean(program.isRegister));
         dispatch(hideLoading());
       })
       .catch((error: AxiosError) => {
@@ -98,7 +150,7 @@ const DetailProgramComponent = (props: { id: number }) => {
         dispatch(showAlert({ color: 'error', message: data.message }));
         dispatch(hideLoading());
       });
-  }, [props.id, dispatch, refresh]);
+  }, [props.id, dispatch, refresh, program.isRegister]);
 
   return (
     <Container>
@@ -164,6 +216,35 @@ const DetailProgramComponent = (props: { id: number }) => {
                 )} `}
               </Typography>
             </CardContent>
+            <CardActions>
+              <Grid container>
+                <Grid item>
+                  <Box display='flex'>
+                    <Box sx={{ m: 1, position: 'relative' }}>
+                      <Button
+                        variant='contained'
+                        disabled={loading}
+                        color={success ? 'success' : 'primary'}
+                        onClick={handleButtonClick}>
+                        {success ? <CheckIcon /> : 'Tham gia'}
+                      </Button>
+                      {loading && (
+                        <CircularProgress
+                          size={24}
+                          sx={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            marginTop: '-12px',
+                            marginLeft: '-12px',
+                          }}
+                        />
+                      )}
+                    </Box>
+                  </Box>
+                </Grid>
+              </Grid>
+            </CardActions>
           </Grid>
         </Grid>
         <Box sx={{ width: '100%' }}>
@@ -191,6 +272,30 @@ const DetailProgramComponent = (props: { id: number }) => {
           </TabPanel>
         </Box>
       </Card>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'>
+        <DialogTitle id='alert-dialog-title'>
+          {'Bạn chưa đăng nhập !'}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Hãn đăng nhập để tham gia chương trình này !
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Hủy</Button>
+          <Button
+            onClick={() => {
+              navigate('/dang-nhap', { replace: true });
+            }}
+            autoFocus>
+            Đăng nhập
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
