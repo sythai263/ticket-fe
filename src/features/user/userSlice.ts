@@ -55,17 +55,17 @@ export const googleLogin = createAsyncThunk(
     try {
       const response = await userAPI.callbackLoginGoogle(token);
       const { data } = response;
-      localStorage.setItem(StorageKeys.token, data.token);
+      localStorage.setItem(StorageKeys.token, token);
       const user: User = {
         firstName: data.firstName,
         lastName: data.lastName,
         avatar: data.avatar,
         role: data.role,
         id: data.id,
-        token: data.token,
+        token,
       };
       axios.defaults.headers.common = {
-        Authorization: `Bearer ${data.token}`,
+        Authorization: `Bearer ${token}`,
       };
       localStorage.setItem(StorageKeys.user, JSON.stringify(user));
       return user;
@@ -175,7 +175,7 @@ const userSlice = createSlice({
       .addCase(googleLogin.fulfilled, (state, { payload }) => {
         state.token = payload.token ? String(payload.token) : '';
         axios.defaults.headers.common = {
-          Authorization: `Bearer ${localStorage.getItem(state.token)}`,
+          Authorization: `Bearer ${state.token}`,
         };
         payload.token = undefined;
         state.current = payload;
