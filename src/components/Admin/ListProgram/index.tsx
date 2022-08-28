@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from 'app/hooks';
 import { AxiosError, AxiosResponse } from 'axios';
 import Meta from 'constants/types/Meta';
 import { ErrorType } from 'constants/types/notification/errorType';
+import { OrderType } from 'constants/types/OrderType';
 import { ProgramType } from 'constants/types/program/programType';
 import QueryType from 'constants/types/queryType';
 import {
@@ -127,7 +128,7 @@ export default function ListProgram() {
     const query = {
       page: page + 1,
       take: rowsPerPage,
-      order: 'DESC',
+      order: OrderType.DESC,
     } as QueryType;
     api.getAll(query).then((response: AxiosResponse) => {
       const data = response.data as GetList;

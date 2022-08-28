@@ -24,6 +24,7 @@ import { AttendeeType } from 'constants/types/attendee/attendeeType';
 import QueryAttendee from 'constants/types/attendee/searchAttendee';
 import { IdType } from 'constants/types/idType';
 import Meta from 'constants/types/Meta';
+import { OrderType } from 'constants/types/OrderType';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import SaleProgramComponent from '../SaleProgram';
@@ -223,7 +224,7 @@ const ListAttendeeComponent = (d: IdType) => {
     const query = {
       page: page + 1,
       take: rowsPerPage,
-      order: 'DESC',
+      order: OrderType.DESC,
     } as QueryAttendee;
     api.getAttendees(d.id, query).then((response: AxiosResponse) => {
       const payload = response.data as GetList;
