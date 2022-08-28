@@ -12,12 +12,17 @@ import {
 import { Container } from '@mui/system';
 import programApi from 'api/program.api';
 import { useAppDispatch, useAppSelector } from 'app/hooks';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import Program from 'components/Program';
+import { ErrorType } from 'constants/types/notification/errorType';
 import { OrderType } from 'constants/types/OrderType';
 import { ProgramType } from 'constants/types/program/programType';
 import QueryType from 'constants/types/queryType';
-import { hideLoading, showLoading } from 'features/notification/notiSlice';
+import {
+  hideLoading,
+  showAlert,
+  showLoading,
+} from 'features/notification/notiSlice';
 import { useEffect, useState } from 'react';
 
 const Programs = () => {
@@ -44,11 +49,18 @@ const Programs = () => {
 
   useEffect(() => {
     dispatch(showLoading());
-    programApi.getAll(query).then((response: AxiosResponse) => {
-      setPrograms(response.data.data);
-      setCount(response.data.meta.pageCount);
-      dispatch(hideLoading());
-    });
+    programApi
+      .getAll(query)
+      .then((response: AxiosResponse) => {
+        setPrograms(response.data.data);
+        setCount(response.data.meta.pageCount);
+        dispatch(hideLoading());
+      })
+      .catch((error: AxiosError) => {
+        dispatch(hideLoading());
+        const data = error.response?.data as ErrorType;
+        dispatch(showAlert({ color: 'error', message: data.message }));
+      });
   }, [refresh, dispatch, query]);
 
   return (
