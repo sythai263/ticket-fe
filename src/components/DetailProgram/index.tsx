@@ -184,7 +184,9 @@ const DetailProgramComponent = (props: { id: number }) => {
                 readOnly
                 precision={0.5}
               />
-              <Typography marginLeft={5}>{program.starAvg}/5</Typography>
+              <Typography marginLeft={5}>
+                {program.starAvg?.toFixed(1)}/5
+              </Typography>
             </Grid>
             <Typography variant='h5' color='text.secondary' textAlign='right'>
               {`Phí: ${Number(program.price).toLocaleString('vi', {

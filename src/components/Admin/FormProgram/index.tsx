@@ -73,7 +73,6 @@ const FormUpdateProgram = (props: { id: number }) => {
       total: Number(program.total),
       place: program.place,
     } as UpdateProgram;
-    dispatch(hideLoading());
 
     api
       .updateProgram(info)
