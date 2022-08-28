@@ -55,7 +55,7 @@ export const googleLogin = createAsyncThunk(
     try {
       const response = await userAPI.callbackLoginGoogle(token);
       const { data } = response;
-      localStorage.setItem(StorageKeys.token, token);
+      localStorage.setItem(StorageKeys.token, data.token);
       const user: User = {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -65,7 +65,7 @@ export const googleLogin = createAsyncThunk(
         token: data.token,
       };
       axios.defaults.headers.common = {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${data.token}`,
       };
       localStorage.setItem(StorageKeys.user, JSON.stringify(user));
       return user;
