@@ -1,0 +1,11 @@
+{
+	"apps": [
+		{
+			"name": "ticket-fe",
+			"script": "npx",
+			"version": "0.0.1",
+			"interpreter": "none",
+			"args": "serve -s build -p 8000"
+		}
+	]
+}
