@@ -180,7 +180,7 @@ const Program = (program: ProgramType) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id='alert-dialog-description'>
-            Hãn đăng nhập để tham gia chương trình này !
+            Hãy đăng nhập để tham gia chương trình này !
           </DialogContentText>
         </DialogContent>
         <DialogActions>

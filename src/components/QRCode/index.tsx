@@ -8,6 +8,8 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAppDispatch } from 'app/hooks';
+import { AxiosError, AxiosResponse } from 'axios';
+import { ErrorType } from 'constants/types/notification/errorType';
 import {
   hideLoading,
   showAlert,
@@ -29,21 +31,25 @@ const QRCodeComponent = () => {
 
   async function attendee() {
     dispatch(showLoading());
-    try {
-      await api.enroll(Number(program));
-      dispatch(hideLoading());
-      dispatch(
-        showAlert({ color: 'success', message: 'Đã đăng ký thành công !' })
-      );
-    } catch (error: any) {
-      dispatch(hideLoading());
-      dispatch(
-        showAlert({
-          color: 'error',
-          message: String(error.response.data.message),
-        })
-      );
-    }
+    api
+      .enroll(Number(program))
+      .then((response: AxiosResponse) => {
+        dispatch(hideLoading());
+        const data = response?.data as ErrorType;
+        dispatch(showAlert({ color: 'success', message: data.message }));
+        setOpen(false);
+      })
+      .catch((error: AxiosError) => {
+        dispatch(hideLoading());
+        const data = error.response?.data as ErrorType;
+        dispatch(
+          showAlert({
+            color: 'error',
+            message: data.message,
+          })
+        );
+        setOpen(false);
+      });
   }
 
   const handleScan = (data: any) => {
