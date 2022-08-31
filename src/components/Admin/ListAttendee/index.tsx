@@ -247,16 +247,17 @@ const ListAttendeeComponent = (d: IdType) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {list.data.length > 0 ? (
-              list.data.map(row => <Row key={row.id} row={row} />)
-            ) : (
-              <Typography>
-                Chưa có ai đăng ký tham gia chương trình này!
-              </Typography>
-            )}
+            {list.data.length > 0
+              ? list.data.map(row => <Row key={row.id} row={row} />)
+              : ''}
           </TableBody>
         </Table>
       </TableContainer>
+      {list.data.length === 0 ? (
+        <Typography>Chưa có ai đăng ký tham gia chương trình này!</Typography>
+      ) : (
+        ''
+      )}
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component='div'

@@ -290,16 +290,19 @@ const ListAttendeeComponent = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.length > 0 ? (
-              data.map(row => <Row key={row.id} row={row} />)
-            ) : (
-              <Typography>
-                Bạn chưa đăng ký tham gia sự kiên nào, Hãy tham gia ngay nhé!
-              </Typography>
-            )}
+            {data.length > 0
+              ? data.map(row => <Row key={row.id} row={row} />)
+              : ''}
           </TableBody>
         </Table>
       </TableContainer>
+      {data.length === 0 ? (
+        <Typography>
+          Bạn chưa đăng ký tham gia sự kiên nào, Hãy tham gia ngay nhé!
+        </Typography>
+      ) : (
+        ''
+      )}
     </Container>
   );
 };

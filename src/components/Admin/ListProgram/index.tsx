@@ -7,6 +7,7 @@ import {
   DialogTitle,
   Grid,
   Link,
+  Typography,
 } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -171,68 +172,75 @@ export default function ListProgram() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {list.data.map(row => {
-              return (
-                <TableRow
-                  hover
-                  role='checkbox'
-                  tabIndex={-1}
-                  key={row.id}
-                  component={Link}
-                  color='inherit'
-                  underline='none'
-                  href={`/admin/su-kien/${row.id}`}>
-                  <TableCell align='right'>{row.id}</TableCell>
-                  <TableCell align='left'>{row.name}</TableCell>
-                  <TableCell align='right'>
-                    {moment(row.startDate).format('HH:mm DD/MM/YYYY')}
-                  </TableCell>
-                  <TableCell align='right'>
-                    {moment(row.endDate).format('HH:mm DD/MM/YYYY')}
-                  </TableCell>
-                  <TableCell align='right'>
-                    {row.price?.toLocaleString('vi', {
-                      style: 'currency',
-                      currency: 'VND',
-                    })}
-                  </TableCell>
-                  <TableCell align='right'>
-                    {row.total?.toLocaleString('vi-VN')}
-                  </TableCell>
-                  <TableCell align='right'>
-                    {row.remain?.toLocaleString('vi-VN')}
-                  </TableCell>
-                  <TableCell align='center'>
-                    <Grid container direction='column' spacing={2}>
-                      <Grid item>
-                        <Button
-                          size='small'
-                          variant='contained'
-                          href={`/admin/su-kien/chinh-sua/${row.id}`}>
-                          <BiEdit size={18} />
-                        </Button>
-                      </Grid>
-                      <Grid item>
-                        <Button
-                          size='small'
-                          variant='contained'
-                          color='error'
-                          onClick={(e: any) => {
-                            e.preventDefault();
-                            setSelect(row.id ? row.id : -1);
-                            setOpenDialog(true);
-                          }}>
-                          <AiOutlineDelete size={18} />
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {list.data.length > 0
+              ? list.data.map(row => {
+                  return (
+                    <TableRow
+                      hover
+                      role='checkbox'
+                      tabIndex={-1}
+                      key={row.id}
+                      component={Link}
+                      color='inherit'
+                      underline='none'
+                      href={`/admin/su-kien/${row.id}`}>
+                      <TableCell align='right'>{row.id}</TableCell>
+                      <TableCell align='left'>{row.name}</TableCell>
+                      <TableCell align='right'>
+                        {moment(row.startDate).format('HH:mm DD/MM/YYYY')}
+                      </TableCell>
+                      <TableCell align='right'>
+                        {moment(row.endDate).format('HH:mm DD/MM/YYYY')}
+                      </TableCell>
+                      <TableCell align='right'>
+                        {row.price?.toLocaleString('vi', {
+                          style: 'currency',
+                          currency: 'VND',
+                        })}
+                      </TableCell>
+                      <TableCell align='right'>
+                        {row.total?.toLocaleString('vi-VN')}
+                      </TableCell>
+                      <TableCell align='right'>
+                        {row.remain?.toLocaleString('vi-VN')}
+                      </TableCell>
+                      <TableCell align='center'>
+                        <Grid container direction='column' spacing={2}>
+                          <Grid item>
+                            <Button
+                              size='small'
+                              variant='contained'
+                              href={`/admin/su-kien/chinh-sua/${row.id}`}>
+                              <BiEdit size={18} />
+                            </Button>
+                          </Grid>
+                          <Grid item>
+                            <Button
+                              size='small'
+                              variant='contained'
+                              color='error'
+                              onClick={(e: any) => {
+                                e.preventDefault();
+                                setSelect(row.id ? row.id : -1);
+                                setOpenDialog(true);
+                              }}>
+                              <AiOutlineDelete size={18} />
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
+              : ''}
           </TableBody>
         </Table>
       </TableContainer>
+      {list.data.length === 0 ? (
+        <Typography>Chưa có sự kiện nào, hãy tạo sự kiện mới !</Typography>
+      ) : (
+        ''
+      )}
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component='div'

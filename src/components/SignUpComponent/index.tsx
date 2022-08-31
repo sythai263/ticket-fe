@@ -51,6 +51,8 @@ const SignUpComponent = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState(init);
   const [errPassword, setErrPassword] = useState(false);
+  const [password, setPassword] = useState('');
+  const [rePassword, setRePassword] = useState('');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -62,6 +64,12 @@ const SignUpComponent = () => {
     }
   }, [userLogin, navigate]);
 
+  useEffect(() => {
+    if (password.trim() !== rePassword.trim()) {
+      setErrPassword(true);
+    } else setErrPassword(false);
+  }, [password, rePassword]);
+
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
@@ -70,21 +78,19 @@ const SignUpComponent = () => {
       ...user,
       [e.target.name]: e.target.value,
     }));
-    if (e.target.name === 'phone') {
-      if (!user.phone || user.phone === '') {
-        setUser(() => ({
-          ...user,
-          phone: undefined,
-        }));
-      }
-    }
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     dispatch(showLoading());
+    const info = { ...user } as CreateUser;
+    if (info.phone && info.phone.trim() === '') {
+      info.phone = undefined;
+    }
+    info.password = password;
+    info.rePassword = rePassword;
 
-    const result = await dispatch(signUp(user));
+    const result = await dispatch(signUp(info));
     if (result.meta.requestStatus === 'rejected') {
       const err = result.payload as ErrorType;
       const mess = String(err.message);
@@ -95,22 +101,10 @@ const SignUpComponent = () => {
       dispatch(
         showAlert({
           color: 'success',
-          message: 'Đăng ký tài khoản thành công! Vui lòng đăng nhập lại',
+          message: 'Đăng ký tài khoản thành công! Vui lòng đăng nhập !',
         })
       );
       navigate('/dang-nhap');
-    }
-  };
-
-  const handleInputPassword = (e: any) => {
-    setUser(() => ({
-      ...user,
-      [e.target.name]: e.target.value,
-    }));
-    if (user.password !== user.rePassword) {
-      setErrPassword(true);
-    } else {
-      setErrPassword(false);
     }
   };
 
@@ -229,6 +223,7 @@ const SignUpComponent = () => {
                   }}>
                   <MenuItem value='Male'>Nam</MenuItem>
                   <MenuItem value='Female'>Nữ</MenuItem>
+                  <MenuItem value='LGBT'>Giới tính thứ 3</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -245,7 +240,9 @@ const SignUpComponent = () => {
                 type={showPassword ? 'text' : 'password'}
                 required
                 label='Mật khẩu'
-                onChange={handleInputPassword}
+                onChange={(e: any) => {
+                  setPassword(e.target.value);
+                }}
                 InputProps={{
                   // <-- This is where the toggle button is added.
                   endAdornment: (
@@ -269,7 +266,9 @@ const SignUpComponent = () => {
                 type={showPassword ? 'text' : 'password'}
                 required
                 label='Nhập lại mật khẩu'
-                onChange={handleInputPassword}
+                onChange={(e: any) => {
+                  setRePassword(e.target.value);
+                }}
                 InputProps={{
                   // <-- This is where the toggle button is added.
                   endAdornment: (
