@@ -1,4 +1,4 @@
-import { Link, useMediaQuery, useTheme } from '@mui/material';
+import { Avatar, Link, useMediaQuery, useTheme } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,7 +7,6 @@ import { useAppSelector } from 'app/hooks';
 import { NavbarData } from 'app/navbar';
 import axios from 'axios';
 import React from 'react';
-import { TiTicket } from 'react-icons/ti';
 import AvatarNav from './Avatar';
 import DrawerComponent from './DrawerComp';
 const marginLeft = '20px';
@@ -27,7 +26,7 @@ const Navbar = () => {
       <AppBar position='sticky'>
         <Toolbar>
           <Link href='/' color='inherit'>
-            <TiTicket size={40} />
+            <Avatar src='/logo.svg' alt='logo' />
           </Link>
           {isMatch ? (
             <>
